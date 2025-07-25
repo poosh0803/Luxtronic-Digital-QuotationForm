@@ -14,6 +14,18 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/newQuotation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'newQuotation.html'));
+});
+
+app.get('/records', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'records.html'));
+});
+
+app.get('/analytics', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
+});
+
 app.post('/submit-quotation', (req, res) => {
   const { customerName, components } = req.body;
   // Logic to calculate quotation based on components

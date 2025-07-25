@@ -1,0 +1,190 @@
+@media print { 
+        /* this is for print mode */
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+    
+    .page-break {
+        page-break-after: always;
+        margin-bottom: 0;
+        border-top: none !important;
+        padding-top: 0 !important;
+        background: none !important;
+        height: 0 !important;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .form-container {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .form-section {
+        margin-bottom: 15px;
+    }
+    
+    .section-title {
+        background-color: #f0f0f0;
+        padding: 3px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #000;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    table, th, td {
+        border: 1px solid #000;
+    }
+    
+    th, td {
+        padding: 3px;
+        text-align: left;
+    }
+    
+    .check-box {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #000;
+        margin-right: 5px;
+        text-align: center;
+        line-height: 12px;
+    }
+    
+    .checked::after {
+        content: "✓";
+        font-weight: bold;
+    }
+    
+    .copy-label {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-weight: bold;
+        border: 1px solid #000;
+        padding: 3px 8px;
+    }
+    
+    ul, li {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    
+    .damage-report p {
+        font-size: 11px;
+        line-height: 1.3;
+    }
+}
+
+/* Styles for preview mode */
+body {
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.form-container {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    background-color: #f8f9fa;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-left: 3px solid #dda84b;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.page-break {
+    border-top: none;
+    margin: 30px 0;
+    padding-top: 0;
+    height: 0;
+}
+
+.check-box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #000;
+    margin-right: 5px;
+    text-align: center;
+    line-height: 14px;
+}
+
+.checked::after {
+    content: "✓";
+    font-weight: bold;
+}
+
+.copy-label {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    font-weight: bold;
+    border: 1px solid #000;
+    padding: 5px 10px;
+}
+
+.print-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #dda84b;
+    border-color: #dda84b;
+}
+
+.print-btn:hover {
+    background-color: #ce9d48;
+    border-color: #ce9d48;
+}
+
+.damage-report p {
+    white-space: pre-line;
+    font-family: monospace;
+    margin: 0;
+    padding: 5px;
+}
+
+.damage-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.damage-table td {
+    padding: 5px;
+    font-family: Arial, sans-serif;
+    vertical-align: top;
+    white-space: pre-line;
+}

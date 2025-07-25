@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Quotation Form</title>
+  <title>Quotation Records</title>
   <link rel="stylesheet" href="css/index.css">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
   </header>
   <!-- Navigation Bar -->
   <nav class="nav-bar">
-    <a href="/" class="nav-item active">
+    <a href="/" class="nav-item">
       <i class="fas fa-th-large"></i>
       <span class="nav-text">Latest</span>
     </a>
@@ -36,7 +36,7 @@
       <i class="fas fa-plus"></i>
       <span class="nav-text">New Quotation</span>
     </a>
-    <a href="/records" class="nav-item">
+    <a href="/records" class="nav-item active">
       <i class="fas fa-folder"></i>
       <span class="nav-text">Quotation Records</span>
     </a>
@@ -45,26 +45,5 @@
       <span class="nav-text">Analytics</span>
     </a>
   </nav>
-  <h1>Build Your Computer</h1>
-  <form id="quotation-form" action="/submit-quotation" method="POST">
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName" name="customerName" required>
-
-    <h2>Components</h2>
-    <div id="components">
-      <div class="component">
-        <label for="componentName">Component Name:</label>
-        <input type="text" name="components[][name]" required>
-
-        <label for="componentPrice">Price:</label>
-        <input type="number" name="components[][price]" required>
-      </div>
-    </div>
-
-    <button type="button" id="add-component">Add Component</button>
-    <button type="submit">Get Quotation</button>
-  </form>
-
-  <script src="js/index.js"></script>
 </body>
 </html>
