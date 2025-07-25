@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Quotation Form</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Build Your Computer</h1>
+  <form id="quotation-form" action="/submit-quotation" method="POST">
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" name="customerName" required>
+
+    <h2>Components</h2>
+    <div id="components">
+      <div class="component">
+        <label for="componentName">Component Name:</label>
+        <input type="text" name="components[][name]" required>
+
+        <label for="componentPrice">Price:</label>
+        <input type="number" name="components[][price]" required>
+      </div>
+    </div>
+
+    <button type="button" id="add-component">Add Component</button>
+    <button type="submit">Get Quotation</button>
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>
