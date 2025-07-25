@@ -78,3 +78,135 @@ header {
 .nav-item.active {
   border-bottom: 2px solid white;
 }
+
+table {
+  width: 85%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  table-layout: fixed;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+table th {
+  background-color: #f4f4f9;
+  font-weight: bold;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+table td input[type="text"] {
+  width: 100%;
+  min-width: 150px;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+table td select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Specific column widths for better layout */
+table th:nth-child(1), table td:nth-child(1) {
+  width: 12% !important;
+}
+
+table th:nth-child(2), table td:nth-child(2) {
+  width: 50% !important;
+}
+
+table th:nth-child(3), table td:nth-child(3) {
+  width: 10% !important;
+}
+
+table th:nth-child(4), table td:nth-child(4) {
+  width: 28% !important;
+}
+
+/* Price Section Styling */
+.price-section {
+  margin: 30px auto;
+  width: 85%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.price-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-input-container label {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.price-input-container input {
+  padding: 12px;
+  border: 2px solid #d4a44c;
+  border-radius: 5px;
+  font-size: 1.1em;
+  width: 200px;
+  text-align: right;
+}
+
+.price-input-container input:focus {
+  outline: none;
+  border-color: #b8941f;
+  box-shadow: 0 0 5px rgba(212, 164, 76, 0.3);
+}
+
+.currency {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #d4a44c;
+}
+
+.submit-btn {
+  background-color: #d4a44c;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #b8941f;
+  transform: translateY(-1px);
+}
