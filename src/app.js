@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // Keep JSON parser for other endpoints
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Use middleware for quotation routes
