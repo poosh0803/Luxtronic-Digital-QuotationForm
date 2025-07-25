@@ -1,13 +1,19 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const middleware = require('./route/middleware');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Use middleware for quotation routes
+app.use('/api', middleware);
 
 // Routes
 app.get('/', (req, res) => {
