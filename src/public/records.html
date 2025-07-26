@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="css/darkmode.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -45,5 +44,27 @@
       <span class="nav-text">Analytics</span>
     </a>
   </nav>
+  <!-- Main Content -->
+  <main>
+    <section class="records-section">
+      <h1>Quotation Records</h1>
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Platform</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Final Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="records-table-body">
+          <!-- Rows will be dynamically populated -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="js/records.js"></script>
 </body>
 </html>

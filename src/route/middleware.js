@@ -270,4 +270,39 @@ router.put('/quotation/:id', (req, res, next) => {
   }
 });
 
+// New endpoint to fetch all records with limited fields
+router.get('/records', async (req, res) => {
+  console.log('=== API /api/records called ===');
+  console.log('Request method:', req.method);
+  console.log('Request URL:', req.url);
+  console.log('Request headers:', req.headers);
+  
+  try {
+    console.log('Attempting to connect to database...');
+    console.log('Database config:', {
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      port: process.env.DB_PORT
+    });
+    
+    console.log('Executing query: SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
+    const result = await pool.query('SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
+    
+    console.log('Query executed successfully');
+    console.log('Records found:', result.rows.length);
+    console.log('Sample record (first):', result.rows[0]);
+    console.log('All records:', result.rows);
+    
+    res.json(result.rows);
+  } catch (err) {
+    console.error('=== DATABASE ERROR ===');
+    console.error('Error message:', err.message);
+    console.error('Error code:', err.code);
+    console.error('Error stack:', err.stack);
+    console.error('Full error object:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 module.exports = router;
