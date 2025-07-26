@@ -65,6 +65,66 @@
       </table>
     </section>
   </main>
+
+  <!-- View Modal -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-eye"></i> View Quotation Record</h2>
+        <span class="close" onclick="closeViewModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <!-- Basic Information Section -->
+        <div class="basic-info-section">
+          <div class="info-row">
+            <div class="info-item">
+              <label>Record ID:</label>
+              <span id="modal-id">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Platform:</label>
+              <span id="modal-platform">Loading...</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <label>Customer Name:</label>
+              <span id="modal-customer">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Date Created:</label>
+              <span id="modal-date">Loading...</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item full-width">
+              <label>Final Price:</label>
+              <span id="modal-price" class="price-display">Loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Components Table Section -->
+        <div class="components-table-section">
+          <h3>Component Details</h3>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Details</th>
+                <th>Unit</th>
+                <th>Upgrade Note</th>
+              </tr>
+            </thead>
+            <tbody id="modal-components-table">
+              <!-- Components will be dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/records.js"></script>
 </body>
 </html>
