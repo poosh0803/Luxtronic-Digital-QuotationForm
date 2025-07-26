@@ -34,7 +34,7 @@ table th:nth-child(6), table td:nth-child(6) {
 }
 
 /* Action Buttons Styling */
-.btn-view, .btn-edit {
+.btn-view, .btn-edit, .btn-delete {
   background: none;
   border: none;
   padding: 6px 8px;
@@ -60,6 +60,15 @@ table th:nth-child(6), table td:nth-child(6) {
 
 .btn-edit:hover {
   background-color: #28a745;
+  color: white;
+}
+
+.btn-delete {
+  color: #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #dc3545;
   color: white;
 }
 
@@ -184,7 +193,7 @@ table td select {
 
 /* Specific column widths for better layout */
 table th:nth-child(1), table td:nth-child(1) {
-  width: 12% !important;
+  width: 10% !important;
 }
 
 table th:nth-child(2), table td:nth-child(2) {
@@ -192,11 +201,11 @@ table th:nth-child(2), table td:nth-child(2) {
 }
 
 table th:nth-child(3), table td:nth-child(3) {
-  width: 20% !important;
+  width: 25% !important;
 }
 
 table th:nth-child(4), table td:nth-child(4) {
-  width: 28% !important;
+  width: 20% !important;
 }
 
 table th:nth-child(5), table td:nth-child(5) {
@@ -204,12 +213,12 @@ table th:nth-child(5), table td:nth-child(5) {
 }
 
 table th:nth-child(6), table td:nth-child(6) {
-  width: 12% !important;
-  text-align: center;
+  width: 20% !important;
+  text-align: center; 
 }
 
 /* Action Buttons Styling */
-.btn-view, .btn-edit {
+.btn-view, .btn-edit, .btn-delete {
   background: none;
   border: none;
   padding: 6px 8px;
@@ -235,6 +244,15 @@ table th:nth-child(6), table td:nth-child(6) {
 
 .btn-edit:hover {
   background-color: #28a745;
+  color: white;
+}
+
+.btn-delete {
+  color: #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #dc3545;
   color: white;
 }
 
@@ -445,6 +463,95 @@ table th:nth-child(6), table td:nth-child(6) {
   font-style: italic;
 }
 
+/* Edit Modal Form Styling */
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #d4a44c;
+  box-shadow: 0 0 0 2px rgba(212, 164, 76, 0.2);
+}
+
+.price-input {
+  text-align: right;
+  font-weight: bold;
+}
+
+.modal-table input[type="text"], 
+.modal-table input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 0.85em;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.modal-table input[type="text"]:focus, 
+.modal-table input[type="number"]:focus {
+  outline: none;
+  border-color: #d4a44c;
+  box-shadow: 0 0 0 1px rgba(212, 164, 76, 0.3);
+}
+
+.modal-table .unit-input {
+  text-align: center;
+  max-width: 60px;
+}
+
+/* Modal Action Buttons */
+.modal-actions {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid #e9ecef;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.btn-save, .btn-cancel {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.95em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-save {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
 /* Responsive adjustments for modal */
 @media (max-width: 768px) {
   .modal-content {
@@ -480,6 +587,22 @@ table th:nth-child(6), table td:nth-child(6) {
   
   .modal-table th, .modal-table td {
     padding: 8px 4px;
+  }
+  
+  .modal-table input[type="text"], 
+  .modal-table input[type="number"] {
+    padding: 4px 6px;
+    font-size: 0.8em;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-save, .btn-cancel {
+    padding: 10px 15px;
+    font-size: 0.9em;
   }
 }
 
@@ -611,4 +734,153 @@ table th:nth-child(6), table td:nth-child(6) {
 .submit-btn:hover {
   background-color: #b8941f;
   transform: translateY(-1px);
+}
+
+/* Latest Quotation Styles */
+.main-content {
+  max-width: 1200px;
+  width: 100%;
+  padding: 20px;
+  margin-top: 140px;
+}
+
+.latest-quotation-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.latest-quotation-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  border-bottom: 3px solid #d4a44c;
+  padding-bottom: 10px;
+}
+
+.quotation-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 25px;
+  border-left: 5px solid #d4a44c;
+}
+
+.quotation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.customer-info h3 {
+  color: #333;
+  margin: 0;
+  font-size: 1.4em;
+}
+
+.quotation-date {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.final-price {
+  font-size: 2em;
+  font-weight: bold;
+  color: #d4a44c;
+  margin: 0;
+}
+
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.component-item {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 3px solid #d4a44c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.component-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+
+.component-details {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.component-unit {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.component-note {
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  font-size: 1.2em;
+  padding: 40px;
+}
+
+.no-quotation {
+  text-align: center;
+  color: #666;
+  font-size: 1.1em;
+  padding: 40px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.platform-badge {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.platform-badge.desktop {
+  background: #28a745;
+}
+
+.platform-badge.laptop {
+  background: #17a2b8;
+}
+
+@media (max-width: 768px) {
+  .quotation-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .components-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .final-price {
+    font-size: 1.6em;
+  }
 }

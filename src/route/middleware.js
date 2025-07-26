@@ -41,6 +41,20 @@ router.get('/quotations', async (req, res) => {
     res.status(500).json({ error: 'Database error', details: err.message });
   }
 });
+
+// Get the latest quotation
+router.get('/quotation/latest', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM quotations ORDER BY created_at DESC LIMIT 1');
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'No quotations found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 function debugTableData(data) {
   console.log('=== DEBUG TABLE DATA ===');
   console.log('Data type:', typeof data);
@@ -301,6 +315,40 @@ router.get('/records', async (req, res) => {
     console.error('Error code:', err.code);
     console.error('Error stack:', err.stack);
     console.error('Full error object:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
+// Delete a quotation by ID
+router.delete('/quotation/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  console.log('=== DELETE QUOTATION REQUEST ===');
+  console.log('Quotation ID to delete:', id);
+  
+  try {
+    // First check if the quotation exists
+    const checkResult = await pool.query('SELECT id FROM quotations WHERE id = $1', [id]);
+    
+    if (checkResult.rows.length === 0) {
+      console.log('Quotation not found for ID:', id);
+      return res.status(404).json({ error: 'Quotation not found' });
+    }
+    
+    // Delete the quotation
+    const deleteResult = await pool.query('DELETE FROM quotations WHERE id = $1 RETURNING id', [id]);
+    
+    console.log('Quotation deleted successfully:', deleteResult.rows[0]);
+    res.json({ 
+      message: 'Quotation deleted successfully', 
+      deletedId: deleteResult.rows[0].id 
+    });
+    
+  } catch (err) {
+    console.error('=== DELETE ERROR ===');
+    console.error('Error message:', err.message);
+    console.error('Error code:', err.code);
+    console.error('Error stack:', err.stack);
     res.status(500).json({ error: 'Database error', details: err.message });
   }
 });
