@@ -119,18 +119,21 @@ function displayQuotation(quotation) {
         const unit = quotation[`${component.key}_unit`];
         const note = quotation[`${component.key}_upgrade_note`];
         
-        if (details && details.trim()) {
-            componentsHtml += `
-                <div class="component-item">
-                    <div class="component-title">
-                        <i class="${component.icon}"></i> ${component.name}
-                    </div>
-                    <div class="component-details">${details}</div>
-                    ${unit ? `<div class="component-unit">Quantity: ${unit}</div>` : ''}
-                    ${note && note.trim() ? `<div class="component-note">Note: ${note}</div>` : ''}
+        // Show all components, even if they don't have details
+        const hasDetails = details && details.trim();
+        const displayDetails = hasDetails ? details : 'No details specified';
+        const itemClass = hasDetails ? 'component-item' : 'component-item component-empty';
+        
+        componentsHtml += `
+            <div class="${itemClass}">
+                <div class="component-title">
+                    <i class="${component.icon}"></i> ${component.name}
                 </div>
-            `;
-        }
+                <div class="component-details ${!hasDetails ? 'empty-details' : ''}">${displayDetails}</div>
+                <div class="component-unit">Quantity: ${unit || 0}</div>
+                ${note && note.trim() ? `<div class="component-note">Note: ${note}</div>` : ''}
+            </div>
+        `;
     });
     
     container.innerHTML = `
@@ -145,19 +148,17 @@ function displayQuotation(quotation) {
                 </div>
             </div>
             <div class="price-info">
-                <div class="final-price">₱${parseFloat(quotation.final_price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+                <div class="final-price">$${parseFloat(quotation.final_price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
             </div>
         </div>
         
-        ${componentsHtml ? `
-            <div class="components-section">
-                <h4 style="margin-bottom: 15px; color: #333;">
-                    <i class="fas fa-cogs"></i> Components & Specifications
-                </h4>
-                <div class="components-grid">
-                    ${componentsHtml}
-                </div>
+        <div class="components-section">
+            <h4 style="margin-bottom: 15px; color: #333;">
+                <i class="fas fa-cogs"></i> Components & Specifications
+            </h4>
+            <div class="components-grid">
+                ${componentsHtml}
             </div>
-        ` : ''}
+        </div>
     `;
 }

@@ -18,6 +18,19 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+// Get the latest quotation
+router.get('/quotation/latest', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM quotations ORDER BY created_at DESC LIMIT 1');
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'No quotations found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 // Get a quotation by ID
 router.get('/quotation/:id', async (req, res) => {
   const { id } = req.params;
@@ -37,19 +50,6 @@ router.get('/quotations', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM quotations');
     res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: 'Database error', details: err.message });
-  }
-});
-
-// Get the latest quotation
-router.get('/quotation/latest', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM quotations ORDER BY created_at DESC LIMIT 1');
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'No quotations found' });
-    }
-    res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Database error', details: err.message });
   }
