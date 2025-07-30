@@ -21,7 +21,7 @@ const pool = new Pool({
 // Get the latest quotation
 router.get('/quotation/latest', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM quotations ORDER BY created_at DESC LIMIT 1');
+    const result = await pool.query('SELECT * FROM quotations ORDER BY id DESC LIMIT 1');
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'No quotations found' });
     }
