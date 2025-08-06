@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDateTime();
     setInterval(updateDateTime, 1000);
     
-    // Load latest quotation
-    loadLatestQuotation();
+    // Load quotation history and setup selector
+    loadQuotationHistory();
+    
+    // Setup quotation selector event listener
+    setupQuotationSelector();
 });
 
 function initializeDarkMode() {
@@ -161,4 +164,113 @@ function displayQuotation(quotation) {
             </div>
         </div>
     `;
+}
+
+async function loadQuotationHistory() {
+    const selector = document.getElementById('quotation-select');
+    const container = document.getElementById('latest-quotation');
+    
+    try {
+        // Show loading state
+        container.innerHTML = '<div class="loading">Loading quotations...</div>';
+        
+        const response = await fetch('/api/quotations');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const quotations = await response.json();
+        
+        if (quotations.length === 0) {
+            container.innerHTML = `
+                <div class="no-quotation">
+                    <i class="fas fa-inbox" style="font-size: 3em; margin-bottom: 15px; color: #ccc;"></i>
+                    <p>No quotations found. <a href="/newQuotation">Create your first quotation</a></p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Clear existing options except "Latest Quotation"
+        selector.innerHTML = '<option value="latest">Latest Quotation</option>';
+        
+        // Add quotations to dropdown
+        quotations.forEach((quotation, index) => {
+            const date = new Date(quotation.created_at).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            const option = document.createElement('option');
+            option.value = quotation.id;
+            option.textContent = `${quotation.customer_name} - ${date} ($${parseFloat(quotation.final_price).toLocaleString()})`;
+            
+            selector.appendChild(option);
+        });
+        
+        // Display the latest quotation by default
+        displayQuotation(quotations[0]);
+        
+    } catch (error) {
+        console.error('Error loading quotation history:', error);
+        container.innerHTML = `
+            <div class="no-quotation">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 15px; color: #dc3545;"></i>
+                <p>Error loading quotations. Please try again later.</p>
+            </div>
+        `;
+    }
+}
+
+function setupQuotationSelector() {
+    const selector = document.getElementById('quotation-select');
+    
+    selector.addEventListener('change', async function() {
+        const selectedValue = this.value;
+        const container = document.getElementById('latest-quotation');
+        
+        if (selectedValue === 'latest') {
+            await loadLatestQuotation();
+        } else {
+            await loadQuotationById(selectedValue);
+        }
+    });
+}
+
+async function loadQuotationById(id) {
+    const container = document.getElementById('latest-quotation');
+    
+    try {
+        container.innerHTML = '<div class="loading">Loading quotation...</div>';
+        
+        const response = await fetch(`/api/quotation/${id}`);
+        
+        if (response.status === 404) {
+            container.innerHTML = `
+                <div class="no-quotation">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 15px; color: #dc3545;"></i>
+                    <p>Quotation not found.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const quotation = await response.json();
+        displayQuotation(quotation);
+        
+    } catch (error) {
+        console.error('Error loading quotation:', error);
+        container.innerHTML = `
+            <div class="no-quotation">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 15px; color: #dc3545;"></i>
+                <p>Error loading quotation. Please try again later.</p>
+            </div>
+        `;
+    }
 }

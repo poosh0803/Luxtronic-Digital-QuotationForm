@@ -49,9 +49,17 @@
   <!-- Main Content -->
   <main class="main-content">
     <div class="latest-quotation-container">
-      <h2>Latest Quotation</h2>
+      <div class="quotation-header-controls">
+        <h2>Quotation Display</h2>
+        <div class="quotation-selector">
+          <label for="quotation-select">Select Quotation:</label>
+          <select id="quotation-select" class="quotation-dropdown">
+            <option value="latest">Latest Quotation</option>
+          </select>
+        </div>
+      </div>
       <div id="latest-quotation" class="quotation-card">
-        <div class="loading">Loading latest quotation...</div>
+        <div class="loading">Loading quotation...</div>
       </div>
     </div>
   </main>

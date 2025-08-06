@@ -760,6 +760,54 @@ table th:nth-child(6), table td:nth-child(6) {
   padding-bottom: 10px;
 }
 
+.quotation-header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.quotation-header-controls h2 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.quotation-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quotation-selector label {
+  color: #666;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.quotation-dropdown {
+  padding: 8px 12px;
+  border: 2px solid #d4a44c;
+  border-radius: 6px;
+  background-color: white;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.quotation-dropdown:focus {
+  outline: none;
+  border-color: #b8941f;
+  box-shadow: 0 0 8px rgba(212, 164, 76, 0.3);
+}
+
+.quotation-dropdown:hover {
+  border-color: #b8941f;
+}
+
 .quotation-card {
   background: #f9f9f9;
   border-radius: 8px;
@@ -927,6 +975,23 @@ table th:nth-child(6), table td:nth-child(6) {
 }
 
 @media (max-width: 768px) {
+  .quotation-header-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .quotation-selector {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .quotation-dropdown {
+    min-width: 150px;
+    flex: 1;
+    max-width: 250px;
+  }
+  
   .quotation-header {
     flex-direction: column;
     align-items: flex-start;
@@ -978,4 +1043,25 @@ table th:nth-child(6), table td:nth-child(6) {
   background: #2d3748;
   color: #a0aec0;
   border-color: #4a5568;
+}
+
+/* Dark mode styles for quotation selector */
+.dark-mode .quotation-selector label {
+  color: #e2e8f0;
+}
+
+.dark-mode .quotation-dropdown {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  border-color: #d4a44c;
+}
+
+.dark-mode .quotation-dropdown:focus {
+  border-color: #b8941f;
+  box-shadow: 0 0 8px rgba(212, 164, 76, 0.4);
+}
+
+.dark-mode .quotation-dropdown:hover {
+  border-color: #b8941f;
+  background-color: #4a5568;
 }
