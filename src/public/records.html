@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="css/darkmode.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -45,5 +44,159 @@
       <span class="nav-text">Analytics</span>
     </a>
   </nav>
+  <!-- Main Content -->
+  <main>
+    <section class="records-section">
+      <h1>Quotation Records</h1>
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Platform</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Final Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="records-table-body">
+          <!-- Rows will be dynamically populated -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- View Modal -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-eye"></i> View Quotation Record</h2>
+        <span class="close" onclick="closeViewModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <!-- Basic Information Section -->
+        <div class="basic-info-section">
+          <div class="info-row">
+            <div class="info-item">
+              <label>Record ID:</label>
+              <span id="modal-id">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Platform:</label>
+              <span id="modal-platform">Loading...</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <label>Customer Name:</label>
+              <span id="modal-customer">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Date Created:</label>
+              <span id="modal-date">Loading...</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item full-width">
+              <label>Final Price:</label>
+              <span id="modal-price" class="price-display">Loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Components Table Section -->
+        <div class="components-table-section">
+          <h3>Component Details</h3>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Details</th>
+                <th>Unit</th>
+                <th>Upgrade Note</th>
+              </tr>
+            </thead>
+            <tbody id="modal-components-table">
+              <!-- Components will be dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-edit"></i> Edit Quotation Record</h2>
+        <span class="close" onclick="closeEditModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <!-- Basic Information Section -->
+        <div class="basic-info-section">
+          <div class="info-row">
+            <div class="info-item">
+              <label>Record ID:</label>
+              <span id="edit-modal-id">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Platform:</label>
+              <select id="edit-modal-platform" class="form-input">
+                <option value="AMD">AMD</option>
+                <option value="INTEL">INTEL</option>
+              </select>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <label>Customer Name:</label>
+              <input type="text" id="edit-modal-customer" class="form-input" placeholder="Enter customer name">
+            </div>
+            <div class="info-item">
+              <label>Date Created:</label>
+              <span id="edit-modal-date">Loading...</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item full-width">
+              <label>Final Price (AUD):</label>
+              <input type="number" id="edit-modal-price" class="form-input price-input" step="0.01" min="0" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+
+        <!-- Components Table Section -->
+        <div class="components-table-section">
+          <h3>Component Details</h3>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Details</th>
+                <th>Unit</th>
+                <th>Upgrade Note</th>
+              </tr>
+            </thead>
+            <tbody id="edit-modal-components-table">
+              <!-- Components will be dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="modal-actions">
+          <button type="button" class="btn-save" onclick="saveRecord()">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          <button type="button" class="btn-cancel" onclick="closeEditModal()">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/records.js"></script>
 </body>
 </html>

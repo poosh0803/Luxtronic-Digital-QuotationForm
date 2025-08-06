@@ -45,25 +45,24 @@
       <span class="nav-text">Analytics</span>
     </a>
   </nav>
-  <h1>Build Your Computer</h1>
-  <form id="quotation-form" action="/submit-quotation" method="POST">
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName" name="customerName" required>
 
-    <h2>Components</h2>
-    <div id="components">
-      <div class="component">
-        <label for="componentName">Component Name:</label>
-        <input type="text" name="components[][name]" required>
-
-        <label for="componentPrice">Price:</label>
-        <input type="number" name="components[][price]" required>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="latest-quotation-container">
+      <div class="quotation-header-controls">
+        <h2>Quotation Display</h2>
+        <div class="quotation-selector">
+          <label for="quotation-select">Select Quotation:</label>
+          <select id="quotation-select" class="quotation-dropdown">
+            <option value="latest">Latest Quotation</option>
+          </select>
+        </div>
+      </div>
+      <div id="latest-quotation" class="quotation-card">
+        <div class="loading">Loading quotation...</div>
       </div>
     </div>
-
-    <button type="button" id="add-component">Add Component</button>
-    <button type="submit">Get Quotation</button>
-  </form>
+  </main>
 
   <script src="js/index.js"></script>
 </body>
