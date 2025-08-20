@@ -352,10 +352,14 @@ async function searchStaticICE(query) {
   showLoading();
   document.getElementById('searchQuery').textContent = `Results for: "${query}"`;
 
+  // Get the number of pages to fetch from dropdown
+  const pagesToFetch = parseInt(document.getElementById('pagesToFetch').value) || 2;
+  console.log(`User selected to fetch ${pagesToFetch} pages`);
+
   try {
-    // Try to fetch multiple pages to get at least 40 listings
-    updateLoadingMessage('Attempting to fetch multiple pages from StaticICE...');
-    const allData = await fetchMultiplePages(query, 2); // Fetch 2 pages = 40 items
+    // Try to fetch multiple pages to get the requested number of listings
+    updateLoadingMessage(`Attempting to fetch ${pagesToFetch} pages from StaticICE...`);
+    const allData = await fetchMultiplePages(query, pagesToFetch);
     
     if (allData.length > 0) {
       // Combine all data and display
