@@ -152,6 +152,10 @@ function displayQuotation(quotation) {
             </div>
             <div class="price-info">
                 <div class="final-price">$${parseFloat(quotation.final_price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+                <button type="button" class="print-btn no-print" onclick="printQuotation()">
+                    <i class="fas fa-print"></i>
+                    Print Quotation
+                </button>
             </div>
         </div>
         
@@ -273,4 +277,65 @@ async function loadQuotationById(id) {
             </div>
         `;
     }
+}
+
+// Print functionality
+function printQuotation() {
+    const quotationContainer = document.getElementById('latest-quotation');
+    const quotationSelector = document.querySelector('.quotation-header-controls');
+    
+    // Get current quotation data from the displayed content
+    const customerName = document.querySelector('.customer-info h3')?.textContent || 'Not specified';
+    const platform = document.querySelector('.platform-badge')?.textContent || 'Not specified';
+    const finalPrice = document.querySelector('.final-price')?.textContent || 'Not specified';
+    const quotationDate = document.querySelector('.quotation-date')?.textContent?.replace(/📅|📆/g, '').trim() || new Date().toLocaleDateString();
+    
+    // Hide quotation selector during print
+    if (quotationSelector) {
+        quotationSelector.classList.add('no-print');
+    }
+    
+    // Add print header
+    const printHeader = document.createElement('div');
+    printHeader.className = 'print-only';
+    printHeader.innerHTML = `
+        <div class="form-header">
+            <h1>LUXTRONIC - Digital Quotation Form</h1>
+            <p>Printed on: ${new Date().toLocaleDateString()}</p>
+            <div style="display: flex; justify-content: space-between; margin-top: 15px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9;">
+                <div><strong>Customer:</strong> ${customerName}</div>
+                <div><strong>Platform:</strong> ${platform}</div>
+                <div><strong>Total Price:</strong> ${finalPrice}</div>
+            </div>
+            <div style="margin-top: 10px; text-align: center; font-size: 12px;">
+                <strong>Original Quotation Date:</strong> ${quotationDate}
+            </div>
+        </div>
+    `;
+    
+    // Insert the print header at the beginning of main content
+    const main = document.querySelector('main');
+    main.insertBefore(printHeader, main.firstChild);
+    
+    // Add a page break class to ensure proper printing
+    const quotationCard = document.querySelector('.quotation-card');
+    if (quotationCard) {
+        quotationCard.style.pageBreakInside = 'avoid';
+    }
+    
+    // Trigger print dialog
+    window.print();
+    
+    // Remove the print header and restore quotation selector after printing
+    setTimeout(() => {
+        if (printHeader.parentNode) {
+            printHeader.parentNode.removeChild(printHeader);
+        }
+        if (quotationSelector) {
+            quotationSelector.classList.remove('no-print');
+        }
+        if (quotationCard) {
+            quotationCard.style.pageBreakInside = '';
+        }
+    }, 1000);
 }

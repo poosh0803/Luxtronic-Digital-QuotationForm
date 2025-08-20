@@ -736,6 +736,27 @@ table th:nth-child(6), table td:nth-child(6) {
   transform: translateY(-1px);
 }
 
+.print-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.print-btn:hover {
+  background-color: #138496;
+  transform: translateY(-1px);
+}
+
 /* Latest Quotation Styles */
 .main-content {
   max-width: 1200px;
@@ -834,6 +855,13 @@ table th:nth-child(6), table td:nth-child(6) {
   color: #666;
   font-size: 0.9em;
   margin-top: 5px;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
 }
 
 .final-price {
