@@ -106,7 +106,7 @@ function displayQuotation(quotation) {
         { key: 'ram', name: 'RAM/Memory', icon: 'fas fa-memory' },
         { key: 'storage1', name: 'Primary Storage', icon: 'fas fa-hdd' },
         { key: 'storage2', name: 'Secondary Storage', icon: 'fas fa-hdd' },
-        { key: 'gpu', name: 'Graphics Card', icon: 'fas fa-display' },
+        { key: 'gpu', name: 'Graphics Card', icon: 'fas fa-gamepad' },
         { key: 'case', name: 'PC Case', icon: 'fas fa-cube' },
         { key: 'psu', name: 'Power Supply', icon: 'fas fa-bolt' },
         { key: 'sys_fan', name: 'System Fans', icon: 'fas fa-fan' },
