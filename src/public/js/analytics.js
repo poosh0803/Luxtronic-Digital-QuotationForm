@@ -257,6 +257,94 @@ function showError(message) {
   document.getElementById('errorMessage').textContent = message;
 }
 
+// Fetch multiple pages from StaticICE
+async function fetchMultiplePages(query, maxPages = 2) {
+  const allResults = [];
+  const baseUrl = 'https://www.staticice.com.au/cgi-bin/search.cgi';
+  
+  console.log(`Starting multi-page fetch for query: "${query}", maxPages: ${maxPages}`);
+  
+  for (let page = 1; page <= maxPages; page++) {
+    try {
+      // Update loading message with progress
+      updateLoadingMessage(`Fetching page ${page} of ${maxPages} from StaticICE...`);
+      
+      const start = (page - 1) * 20 + 1; // Page 1: start=1, Page 2: start=21, etc.
+      const pageUrl = `${baseUrl}?q=${encodeURIComponent(query)}&start=${start}&links=20&showadres=1&pos=1`;
+      
+      console.log(`Fetching page ${page}: ${pageUrl}`);
+      
+      // Use our server-side proxy to fetch this page
+      const proxyUrl = `/api/staticice-proxy-multipage?url=${encodeURIComponent(pageUrl)}`;
+      console.log(`Proxy URL: ${proxyUrl}`);
+      
+      const response = await fetch(proxyUrl);
+      
+      if (!response.ok) {
+        console.warn(`Failed to fetch page ${page}: HTTP ${response.status}`);
+        const errorText = await response.text();
+        console.warn(`Error response:`, errorText);
+        continue;
+      }
+      
+      const data = await response.json();
+      console.log(`Page ${page} response:`, { success: data.success, hasContent: !!data.content });
+      
+      if (data.success && data.content) {
+        const pageResults = parseStaticICEData(data.content);
+        console.log(`Page ${page} returned ${pageResults.length} results`);
+        
+        if (pageResults.length === 0) {
+          console.log(`No more results found on page ${page}, stopping fetch`);
+          break; // No more results, stop fetching
+        }
+        
+        allResults.push(...pageResults);
+        
+        // Update loading message with current results count
+        updateLoadingMessage(`Found ${allResults.length} products so far... (Page ${page} of ${maxPages})`);
+      } else {
+        console.warn(`Page ${page} fetch failed:`, data.error || 'Unknown error');
+      }
+      
+      // Add a small delay between requests to be respectful
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+    } catch (error) {
+      console.error(`Error fetching page ${page}:`, error);
+    }
+  }
+  
+  updateLoadingMessage(`Processing ${allResults.length} products...`);
+  console.log(`Total results fetched: ${allResults.length}`);
+  return allResults;
+}
+
+// Update loading message
+function updateLoadingMessage(message) {
+  const loadingMessage = document.getElementById('loadingMessage');
+  if (loadingMessage) {
+    loadingMessage.textContent = message;
+  }
+}
+
+// Display results from multiple pages
+function displayMultiPageResults(allData, query) {
+  // Store the combined data globally
+  currentPricingData = allData;
+  window.currentPricingData = allData;
+  
+  // Update StaticICE link with the first page URL
+  const firstPageUrl = `https://www.staticice.com.au/cgi-bin/search.cgi?q=${encodeURIComponent(query)}&start=1&links=20&showadres=1&pos=1`;
+  const staticiceLink = document.querySelector('.staticice-link');
+  if (staticiceLink) {
+    staticiceLink.href = firstPageUrl;
+  }
+  
+  // Apply current store filter
+  applyStoreFilter();
+}
+
 // Main search function
 async function searchStaticICE(query) {
   currentSearchTerm = query;
@@ -265,7 +353,21 @@ async function searchStaticICE(query) {
   document.getElementById('searchQuery').textContent = `Results for: "${query}"`;
 
   try {
-    // Use our server-side proxy to fetch StaticICE data
+    // Try to fetch multiple pages to get at least 40 listings
+    updateLoadingMessage('Attempting to fetch multiple pages from StaticICE...');
+    const allData = await fetchMultiplePages(query, 2); // Fetch 2 pages = 40 items
+    
+    if (allData.length > 0) {
+      // Combine all data and display
+      displayMultiPageResults(allData, query);
+      showResults();
+      return;
+    }
+    
+    // If multi-page fails, fallback to single page
+    console.log('Multi-page fetch failed, trying single page fallback...');
+    updateLoadingMessage('Trying single page fallback...');
+    
     const response = await fetch(`/api/staticice-proxy?q=${encodeURIComponent(query)}&spos=3`);
     
     if (!response.ok) {
@@ -278,6 +380,7 @@ async function searchStaticICE(query) {
       // Parse and display the pricing data as a table
       displayPricingTable(data.content, data.url, query);
       showResults();
+      return;
     } else {
       throw new Error(data.error || 'Failed to fetch data');
     }
