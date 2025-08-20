@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/analytics.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -45,5 +46,160 @@
       <span class="nav-text">Analytics</span>
     </a>
   </nav>
-</body>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h1>Product Price Analytics</h1>
+        <p>Search and analyze product prices from StaticICE</p>
+      </div>
+
+      <!-- Search Section -->
+      <div class="card">
+        <div class="card-title">StaticICE Product Search</div>
+        <div class="card-subtitle">Search for products and view pricing information</div>
+        
+        <div class="search-container">
+          <div class="search-input-group">
+            <input type="text" id="searchInput" placeholder="Enter product name (e.g., RTX 5080)" class="search-input">
+            <button id="searchBtn" class="search-btn">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+          <div class="search-options">
+            <label>
+              <input type="checkbox" id="includeOOS" checked> Include out of stock items
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Section -->
+      <div id="loadingSection" class="card" style="display: none;">
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <p>Fetching product data from StaticICE...</p>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection" class="card" style="display: none;">
+        <div class="results-header">
+          <div class="results-title-section">
+            <div class="card-title">Search Results</div>
+            <div class="card-subtitle" id="searchQuery"></div>
+          </div>
+          <div class="results-actions-section">
+            <div class="data-source">
+              <i class="fas fa-database"></i>
+              <span>Data from: <a href="https://www.staticice.com.au" target="_blank" class="staticice-link"><strong>StaticICE</strong></a></span>
+            </div>
+            <div class="action-buttons">
+              <div class="store-filter-dropdown">
+                <button id="storeFilterBtn" class="filter-btn">
+                  <i class="fas fa-filter"></i> Filter Stores
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <div id="storeFilterMenu" class="filter-menu">
+                  <div class="filter-header">
+                    <span>Filter by Store</span>
+                    <div class="filter-actions">
+                      <button id="selectAllStores" class="filter-action">All</button>
+                      <button id="clearAllStores" class="filter-action">None</button>
+                      <button id="defaultStores" class="filter-action">Default</button>
+                    </div>
+                  </div>
+                  <div class="filter-options">
+                    <label class="filter-option">
+                      <input type="checkbox" value="Mwave Australia" checked>
+                      <span>Mwave Australia</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="Scorptec" checked>
+                      <span>Scorptec</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="UMart" checked>
+                      <span>UMart</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="PC Case Gear">
+                      <span>PC Case Gear</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="PLE Computers"> 
+                      <span>PLE Computers</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="CCPU Computers">
+                      <span>CCPU Computers</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="Computer Alliance">
+                      <span>Computer Alliance</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="JW Computers">
+                      <span>JW Computers</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="SkyComp Technology">
+                      <span>SkyComp Technology</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="I-Tech">
+                      <span>I-Tech</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="Others">
+                      <span>Others</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <button id="exportCsvBtn" class="action-btn export-btn">
+                <i class="fas fa-download"></i> Export CSV
+              </button>
+              <button id="refreshBtn" class="action-btn refresh-btn">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- StaticICE Content Display -->
+        <div id="staticiceContent" class="staticice-container">
+          <!-- Fetched content will be displayed here -->
+        </div>
+      </div>
+
+      <!-- Error Section -->
+      <div id="errorSection" class="card error-card" style="display: none;">
+        <div class="error-content">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Error Loading Data</h3>
+          <p id="errorMessage">Unable to fetch data from StaticICE. This might be due to CORS restrictions or network issues.</p>
+          <button id="retryBtn" class="retry-btn">
+            <i class="fas fa-redo"></i> Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Moved to external file: js/analytics.js
+    // Example search on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Pre-populate with RTX 5080 as example
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.value = 'RTX 5080';
+      }
+    });
+  </script>
+  <script src="js/analytics.js"></script>
 </html>
