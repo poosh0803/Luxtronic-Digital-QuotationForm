@@ -573,7 +573,6 @@ function generatePricingTable(data) {
             <th class="product-column">Product</th>
             <th class="price-column">Price</th>
             <th class="store-column">Store</th>
-            <th class="location-column">Location</th>
             <th class="availability-column">Status</th>
             <th class="action-column">View</th>
           </tr>
@@ -595,9 +594,6 @@ function generatePricingTable(data) {
           <span class="price-value">${item.price || 'N/A'}</span>
         </td>
         <td class="store-cell">${item.store}</td>
-        <td class="location-cell">
-          <span class="location-text">${item.storeLocation || '-'}</span>
-        </td>
         <td class="availability-cell">
           <span class="availability-status ${getAvailabilityClass(item.availability)}">${item.availability}</span>
           ${item.updateDate ? `<div class="update-date">Updated: ${item.updateDate}</div>` : ''}
@@ -676,13 +672,12 @@ function exportToCsv() {
   }
 
   const csvContent = [
-    ['Rank', 'Product Name', 'Price', 'Store', 'Location', 'Availability', 'Updated'],
+    ['Rank', 'Product Name', 'Price', 'Store', 'Availability', 'Updated'],
     ...data.map((item, index) => [
       index + 1,
       item.productName,
       item.price || 'N/A',
       item.store,
-      item.storeLocation || '-',
       item.availability,
       item.updateDate || '-'
     ])

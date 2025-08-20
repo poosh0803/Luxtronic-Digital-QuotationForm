@@ -1270,10 +1270,6 @@
     width: 150px;
 }
 
-.location-column {
-    width: 100px;
-}
-
 .availability-column {
     width: 120px;
 }
@@ -1331,19 +1327,6 @@
 
 .store-cell {
     font-weight: 500;
-}
-
-.location-cell {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-.location-text {
-    padding: 2px 6px;
-    background-color: #f3f4f6;
-    border-radius: 3px;
-    font-size: 11px;
-    text-transform: uppercase;
 }
 
 .availability-status {
@@ -1455,10 +1438,6 @@
     
     .product-column {
         min-width: 150px;
-    }
-    
-    .location-column {
-        display: none; /* Hide location on mobile */
     }
     
     .rank-badge {
