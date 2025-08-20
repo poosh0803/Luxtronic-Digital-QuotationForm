@@ -736,6 +736,27 @@ table th:nth-child(6), table td:nth-child(6) {
   transform: translateY(-1px);
 }
 
+.print-btn {
+  background-color: #d4a44c;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.print-btn:hover {
+  background-color: #b8941f;
+  transform: translateY(-1px);
+}
+
 /* Latest Quotation Styles */
 .main-content {
   max-width: 1200px;
@@ -836,6 +857,13 @@ table th:nth-child(6), table td:nth-child(6) {
   margin-top: 5px;
 }
 
+.price-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+}
+
 .final-price {
   font-size: 2em;
   font-weight: bold;
@@ -845,7 +873,7 @@ table th:nth-child(6), table td:nth-child(6) {
 
 .components-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-top: 20px;
 }
@@ -999,11 +1027,18 @@ table th:nth-child(6), table td:nth-child(6) {
   }
   
   .components-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .final-price {
     font-size: 1.6em;
+  }
+}
+
+/* Extra small screens - single column */
+@media (max-width: 600px) {
+  .components-grid {
+    grid-template-columns: 1fr;
   }
 }
 
