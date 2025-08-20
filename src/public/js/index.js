@@ -300,15 +300,15 @@ function printQuotation() {
     printHeader.className = 'print-only';
     printHeader.innerHTML = `
         <div class="form-header">
-            <h1>LUXTRONIC - Digital Quotation Form</h1>
+            <h1 style="color: #d4a44c;">LUXTRONIC - Digital Quotation Form</h1>
             <p>Printed on: ${new Date().toLocaleDateString()}</p>
-            <div style="display: flex; justify-content: space-between; margin-top: 15px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9;">
-                <div><strong>Customer:</strong> ${customerName}</div>
-                <div><strong>Platform:</strong> ${platform}</div>
-                <div><strong>Total Price:</strong> ${finalPrice}</div>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; padding: 8px; border: 2px solid #d4a44c; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; font-size: 10px;">
+                <div style="color: #333;"><strong style="color: #d4a44c;">Customer:</strong> ${customerName}</div>
+                <div style="color: #333;"><strong style="color: #d4a44c;">Platform:</strong> ${platform}</div>
+                <div style="color: #333;"><strong style="color: #d4a44c;">Total Price:</strong> ${finalPrice}</div>
             </div>
-            <div style="margin-top: 10px; text-align: center; font-size: 12px;">
-                <strong>Original Quotation Date:</strong> ${quotationDate}
+            <div style="margin-top: 8px; text-align: center; font-size: 9px; background-color: #f8f9fa; padding: 4px; border-radius: 4px; border: 1px solid #e9ecef;">
+                <strong style="color: #d4a44c;">Original Quotation Date:</strong> <span style="color: #666;">${quotationDate}</span>
             </div>
         </div>
     `;
@@ -323,13 +323,34 @@ function printQuotation() {
         quotationCard.style.pageBreakInside = 'avoid';
     }
     
+    // Add notes section at the bottom
+    const notesSection = document.createElement('div');
+    notesSection.className = 'print-only notes-section';
+    notesSection.innerHTML = `
+        <div style="margin-top: 15px; padding: 8px; border: 2px solid #d4a44c; border-radius: 6px; background-color: #fefefe;">
+            <div style="font-weight: bold; color: #d4a44c; margin-bottom: 5px; font-size: 10px;">
+                <i class="fas fa-sticky-note" style="margin-right: 4px;"></i>Notes:
+            </div>
+            <div style="min-height: 100px; border: 1px dashed #ccc; padding: 6px; background-color: #fcfcfc; border-radius: 3px;">
+                <div style="color: #999; font-size: 8px; font-style: italic;"></div>
+            </div>
+        </div>
+    `;
+    
+    // Insert notes section after the quotation content
+    const mainElement = document.querySelector('main');
+    mainElement.appendChild(notesSection);
+    
     // Trigger print dialog
     window.print();
     
-    // Remove the print header and restore quotation selector after printing
+    // Remove the print header, notes section and restore quotation selector after printing
     setTimeout(() => {
         if (printHeader.parentNode) {
             printHeader.parentNode.removeChild(printHeader);
+        }
+        if (notesSection.parentNode) {
+            notesSection.parentNode.removeChild(notesSection);
         }
         if (quotationSelector) {
             quotationSelector.classList.remove('no-print');
