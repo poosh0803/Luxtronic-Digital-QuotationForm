@@ -301,15 +301,6 @@ function printQuotation() {
     printHeader.innerHTML = `
         <div class="form-header">
             <h1 style="color: #d4a44c;">LUXTRONIC - Digital Quotation Form</h1>
-            <p>Printed on: ${new Date().toLocaleDateString()}</p>
-            <div style="display: flex; justify-content: space-between; margin-top: 8px; padding: 8px; border: 2px solid #d4a44c; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; font-size: 10px;">
-                <div style="color: #333;"><strong style="color: #d4a44c;">Customer:</strong> ${customerName}</div>
-                <div style="color: #333;"><strong style="color: #d4a44c;">Platform:</strong> ${platform}</div>
-                <div style="color: #333;"><strong style="color: #d4a44c;">Total Price:</strong> ${finalPrice}</div>
-            </div>
-            <div style="margin-top: 8px; text-align: center; font-size: 9px; background-color: #f8f9fa; padding: 4px; border-radius: 4px; border: 1px solid #e9ecef;">
-                <strong style="color: #d4a44c;">Original Quotation Date:</strong> <span style="color: #666;">${quotationDate}</span>
-            </div>
         </div>
     `;
     
