@@ -306,40 +306,34 @@ function printQuotation() {
         quotationCard.style.pageBreakInside = 'avoid';
     }
     
-    // Add notes section at the bottom
-    const notesSection = document.createElement('div');
-    notesSection.className = 'print-only notes-section';
-    notesSection.innerHTML = `
-        <div style="margin-top: 15px; padding: 8px; border: 2px solid #d4a44c; border-radius: 6px; background-color: #fefefe;">
-            <div style="font-weight: bold; color: #d4a44c; margin-bottom: 5px; font-size: 10px;">
-                <i class="fas fa-sticky-note" style="margin-right: 4px;"></i>Notes:
-            </div>
-            <div style="min-height: 100px; border: 1px dashed #ccc; padding: 6px; background-color: #fcfcfc; border-radius: 3px;">
-                <div style="color: #999; font-size: 8px; font-style: italic;"></div>
-            </div>
-        </div>
-    `;
+    // // Add notes section at the bottom
+    // const notesSection = document.createElement('div');
+    // notesSection.className = 'print-only notes-section';
+    // notesSection.innerHTML = `
+    //     <div style="margin-top: 15px; padding: 8px; border: 2px solid #d4a44c; border-radius: 6px; background-color: #fefefe;">
+    //         <div style="font-weight: bold; color: #d4a44c; margin-bottom: 5px; font-size: 10px;">
+    //             <i class="fas fa-sticky-note" style="margin-right: 4px;"></i>Notes:
+    //         </div>
+    //         <div style="min-height: 100px; border: 1px dashed #ccc; padding: 6px; background-color: #fcfcfc; border-radius: 3px;">
+    //             <div style="color: #999; font-size: 8px; font-style: italic;"></div>
+    //         </div>
+    //     </div>
+    // `;
     
-    // Insert notes section after the quotation content
-    const mainElement = document.querySelector('main');
-    mainElement.appendChild(notesSection);
+    // // Insert notes section after the quotation content
+    // const mainElement = document.querySelector('main');
+    // mainElement.appendChild(notesSection);
     
     // Trigger print dialog
     window.print();
     
-    // Remove the print header, notes section and restore quotation selector after printing
+    // Remove the print header and restore quotation selector after printing
     setTimeout(() => {
         if (printHeader.parentNode) {
             printHeader.parentNode.removeChild(printHeader);
         }
-        if (notesSection.parentNode) {
-            notesSection.parentNode.removeChild(notesSection);
-        }
         if (quotationSelector) {
             quotationSelector.classList.remove('no-print');
-        }
-        if (quotationCard) {
-            quotationCard.style.pageBreakInside = '';
         }
     }, 1000);
 }
