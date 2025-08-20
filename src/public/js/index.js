@@ -281,15 +281,7 @@ async function loadQuotationById(id) {
 
 // Print functionality
 function printQuotation() {
-    const quotationContainer = document.getElementById('latest-quotation');
     const quotationSelector = document.querySelector('.quotation-header-controls');
-    
-    // Get current quotation data from the displayed content
-    const customerName = document.querySelector('.customer-info h3')?.textContent || 'Not specified';
-    const platform = document.querySelector('.platform-badge')?.textContent || 'Not specified';
-    const finalPrice = document.querySelector('.final-price')?.textContent || 'Not specified';
-    const quotationDate = document.querySelector('.quotation-date')?.textContent?.replace(/📅|📆/g, '').trim() || new Date().toLocaleDateString();
-    
     // Hide quotation selector during print
     if (quotationSelector) {
         quotationSelector.classList.add('no-print');
