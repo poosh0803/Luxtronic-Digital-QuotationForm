@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeSearch();
 
   // Pre-populate with RTX 5080 as example
-  document.getElementById('searchInput').value = 'RTX 5080';
+  document.getElementById('searchInput').value = '';
 });
 
 // Current date/time display
