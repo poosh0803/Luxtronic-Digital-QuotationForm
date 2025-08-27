@@ -1274,6 +1274,11 @@
     width: 120px;
 }
 
+.source-column {
+    width: 100px;
+    text-align: center;
+}
+
 .action-column {
     width: 60px;
     text-align: center;

@@ -31,6 +31,9 @@ app.get('/records', (req, res) => {
 app.get('/analytics', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
 });
+app.get('/centrecom', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'centrecom.html'));
+});
 
 // Proxy endpoint to fetch StaticICE data (to bypass CORS)
 app.get('/api/staticice-proxy', async (req, res) => {

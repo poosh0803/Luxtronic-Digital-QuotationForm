@@ -277,7 +277,7 @@ table th:nth-child(6), table td:nth-child(6) {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   width: 98%;
   max-width: 1200px;
-  max-height: 90vh;
+  max-height: 98vh;
   overflow: hidden;
   animation: slideIn 0.3s ease;
 }
@@ -310,7 +310,7 @@ table th:nth-child(6), table td:nth-child(6) {
 
 .modal-body {
   padding: 20px;
-  max-height: 60vh;
+  max-height: 85vh;
   overflow-y: auto;
 }
 
@@ -626,7 +626,8 @@ table th:nth-child(6), table td:nth-child(6) {
 @media (max-width: 480px) {
   .modal-content {
     width: 99%;
-    margin: 2% auto;
+    margin: 1% auto;
+    max-height: 99vh;
   }
   
   .modal-header {
@@ -639,6 +640,7 @@ table th:nth-child(6), table td:nth-child(6) {
   
   .modal-body {
     padding: 12px;
+    max-height: 90vh;
   }
   
   .modal-table {
