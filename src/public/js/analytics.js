@@ -151,7 +151,7 @@ function setupStoreFilter() {
   if (defaultBtn) {
     defaultBtn.addEventListener('click', () => {
       const checkboxes = filterMenu.querySelectorAll('input[type="checkbox"]');
-      const defaultStores = ['Mwave Australia', 'Scorptec', 'UMart'];
+      const defaultStores = ['Centrecom', 'Mwave Australia', 'Scorptec', 'UMart'];
       
       checkboxes.forEach(cb => {
         cb.checked = defaultStores.includes(cb.value);
@@ -328,6 +328,44 @@ function updateLoadingMessage(message) {
   }
 }
 
+// Fetch Centrecom API results
+async function fetchCentrecomResults(query) {
+  const apiUrl = `https://computerparts.centrecom.com.au/api/search?cid=0ae1fd6a074947699fbe46df65ee5714&q=${encodeURIComponent(query)}`;
+  const corsProxy = 'https://corsproxy.io/?';
+  
+  try {
+    const response = await fetch(corsProxy + encodeURIComponent(apiUrl));
+    const jsonText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(jsonText);
+    } catch (e) {
+      console.warn('Failed to parse Centrecom response:', e);
+      return [];
+    }
+    
+    const products = Array.isArray(data.p) ? data.p : [];
+    
+    // Convert Centrecom products to analytics format
+    return products.map(product => ({
+      productName: product.name || 'N/A',
+      price: product.price !== undefined ? `$${product.price}` : 'N/A',
+      rawPrice: product.price !== undefined ? parseFloat(product.price) : 999999,
+      store: 'Centrecom',
+      storeLocation: '',
+      availability: product.stockAvailablity || product.stockAvailability || 'Unknown',
+      updateDate: null,
+      url: product.seName ? `https://www.centrecom.com.au/${product.seName}` : (product.seoName ? `https://www.centrecom.com.au/${product.seoName}` : '#'),
+      description: product.sellingPoint || '',
+      source: 'Centrecom',
+      imgUrl: product.imgUrl || ''
+    }));
+  } catch (err) {
+    console.warn('Error fetching Centrecom data:', err);
+    return [];
+  }
+}
+
 // Display results from multiple pages
 function displayMultiPageResults(allData, query) {
   // Store the combined data globally
@@ -357,19 +395,31 @@ async function searchStaticICE(query) {
   console.log(`User selected to fetch ${pagesToFetch} pages`);
 
   try {
-    // Try to fetch multiple pages to get the requested number of listings
-    updateLoadingMessage(`Attempting to fetch ${pagesToFetch} pages from StaticICE...`);
-    const allData = await fetchMultiplePages(query, pagesToFetch);
+    // Fetch from both sources in parallel
+    updateLoadingMessage(`Fetching from StaticICE and Centrecom...`);
+    const [staticiceData, centrecomData] = await Promise.all([
+      fetchMultiplePages(query, pagesToFetch),
+      fetchCentrecomResults(query)
+    ]);
+    
+    // Add source labels to StaticICE data
+    staticiceData.forEach(item => item.source = 'StaticICE');
+    
+    // Combine both datasets
+    const allData = [...staticiceData, ...centrecomData];
     
     if (allData.length > 0) {
-      // Combine all data and display
+      // Sort by price (lowest first)
+      allData.sort((a, b) => a.rawPrice - b.rawPrice);
+      
+      // Display combined results
       displayMultiPageResults(allData, query);
       showResults();
       return;
     }
     
-    // If multi-page fails, fallback to single page
-    console.log('Multi-page fetch failed, trying single page fallback...');
+    // If both fail, fallback to single page StaticICE
+    console.log('Both sources failed, trying single page fallback...');
     updateLoadingMessage('Trying single page fallback...');
     
     const response = await fetch(`/api/staticice-proxy?q=${encodeURIComponent(query)}&spos=3`);
@@ -390,7 +440,7 @@ async function searchStaticICE(query) {
     }
     
   } catch (error) {
-    console.error('Error fetching StaticICE data:', error);
+    console.error('Error fetching data:', error);
     
     // Fallback: Show direct link and iframe attempt
     const directUrl = `https://www.staticice.com.au/cgi-bin/search.cgi?q=${encodeURIComponent(query)}&spos=3`;
@@ -574,6 +624,7 @@ function generatePricingTable(data) {
             <th class="price-column">Price</th>
             <th class="store-column">Store</th>
             <th class="availability-column">Status</th>
+            <th class="source-column">Source</th>
             <th class="action-column">View</th>
           </tr>
         </thead>
@@ -582,6 +633,8 @@ function generatePricingTable(data) {
 
   data.forEach((item, index) => {
     const rankClass = index < 3 ? `rank-${index + 1}` : '';
+    const sourceColor = item.source === 'Centrecom' ? '#f59e0b' : '#3b82f6';
+    
     tableHTML += `
       <tr class="pricing-row ${rankClass}">
         <td class="rank-cell">
@@ -597,6 +650,9 @@ function generatePricingTable(data) {
         <td class="availability-cell">
           <span class="availability-status ${getAvailabilityClass(item.availability)}">${item.availability}</span>
           ${item.updateDate ? `<div class="update-date">Updated: ${item.updateDate}</div>` : ''}
+        </td>
+        <td class="source-cell">
+          <span class="source-badge" style="background-color: ${sourceColor}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">${item.source || 'Unknown'}</span>
         </td>
         <td class="action-cell">
           ${item.url ? `<a href="${item.url}" target="_blank" class="view-btn" title="View on ${item.store}"><i class="fas fa-external-link-alt"></i></a>` : ''}
@@ -672,13 +728,14 @@ function exportToCsv() {
   }
 
   const csvContent = [
-    ['Rank', 'Product Name', 'Price', 'Store', 'Availability', 'Updated'],
+    ['Rank', 'Product Name', 'Price', 'Store', 'Availability', 'Source', 'Updated'],
     ...data.map((item, index) => [
       index + 1,
       item.productName,
       item.price || 'N/A',
       item.store,
       item.availability,
+      item.source || 'Unknown',
       item.updateDate || '-'
     ])
   ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
@@ -687,7 +744,7 @@ function exportToCsv() {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `staticice-prices-${currentSearchTerm.replace(/[^a-zA-Z0-9]/g, '-')}.csv`;
+  a.download = `combined-prices-${currentSearchTerm.replace(/[^a-zA-Z0-9]/g, '-')}.csv`;
   a.click();
   window.URL.revokeObjectURL(url);
 }
