@@ -47,10 +47,21 @@
   <!-- Main Content -->
   <main>
     <section class="records-section">
-      <h1>Quotation Records</h1>
+      <div class="records-header">
+        <h1>Quotation Records</h1>
+        <div class="filter-controls">
+          <button id="showFavoritesBtn" class="btn-filter" onclick="toggleFavoritesFilter()" title="Show only favorites">
+            <i class="fas fa-star"></i> Show Favorites
+          </button>
+          <button id="showAllBtn" class="btn-filter active" onclick="showAllRecords()" title="Show all records">
+            <i class="fas fa-list"></i> Show All
+          </button>
+        </div>
+      </div>
       <table class="records-table">
         <thead>
           <tr>
+            <th style="width: 50px;">★</th>
             <th>ID</th>
             <th>Platform</th>
             <th>Customer Name</th>

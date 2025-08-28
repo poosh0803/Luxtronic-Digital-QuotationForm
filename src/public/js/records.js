@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const recordsTableBody = document.getElementById('records-table-body');
   console.log('Table body element found:', !!recordsTableBody);
 
+  // Initialize favorites from database
+  await initializeFavorites();
+
   try {
     console.log('=== Starting fetch request ===');
     console.log('Fetching records from /api/quotations');
@@ -33,38 +36,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (records.length === 0) {
       console.log('No records found in database');
       const row = document.createElement('tr');
-      row.innerHTML = '<td colspan="6" style="text-align: center;">No records found</td>';
+      row.innerHTML = '<td colspan="7" style="text-align: center;">No records found</td>';
       recordsTableBody.appendChild(row);
       return;
     }
 
     console.log('=== Processing records ===');
-    records.forEach((record, index) => {
-      console.log(`Processing record ${index + 1}:`, record);
-      const row = document.createElement('tr');
-
-      row.innerHTML = `
-        <td>${record.id}</td>
-        <td>${record.platform}</td>
-        <td>${record.customer_name}</td>
-        <td>${new Date(record.created_at).toLocaleDateString()}</td>
-        <td>$${record.final_price}</td>
-        <td>
-          <button class="btn-view" onclick="viewRecord(${record.id})" title="View Record">
-            <i class="fas fa-eye"></i>
-          </button>
-          <button class="btn-edit" onclick="editRecord(${record.id})" title="Edit Record">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn-delete" onclick="deleteRecord(${record.id})" title="Delete Record">
-            <i class="fas fa-trash"></i>
-          </button>
-        </td>
-      `;
-
-      recordsTableBody.appendChild(row);
-      console.log(`Row ${index + 1} added to table`);
-    });
+    allRecords = records; // Store all records for filtering
+    renderRecords(allRecords); // Use the new render function
     
     console.log('=== All records processed successfully ===');
   } catch (error) {
@@ -75,10 +54,206 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Full error:', error);
     
     const row = document.createElement('tr');
-    row.innerHTML = '<td colspan="6" style="text-align: center;">Error loading records: ' + error.message + '</td>';
+    row.innerHTML = '<td colspan="7" style="text-align: center;">Error loading records: ' + error.message + '</td>';
     recordsTableBody.appendChild(row);
   }
 });
+
+// Favorites functionality - Database-synced
+let favorites = [];
+let allRecords = []; // Store all records for filtering
+let showingOnlyFavorites = false;
+
+// Initialize favorites from database
+async function initializeFavorites() {
+  try {
+    console.log('Loading favorites from database...');
+    const response = await fetch('/api/favorites');
+    if (response.ok) {
+      favorites = await response.json();
+      console.log('Loaded favorites from database:', favorites);
+    } else {
+      console.error('Failed to load favorites:', response.status);
+      favorites = [];
+    }
+  } catch (error) {
+    console.error('Error loading favorites from database:', error);
+    favorites = [];
+    // Fallback to localStorage for offline functionality
+    const storedFavorites = localStorage.getItem('quotation-favorites');
+    if (storedFavorites) {
+      try {
+        favorites = JSON.parse(storedFavorites);
+        console.log('Loaded favorites from localStorage fallback:', favorites);
+      } catch (err) {
+        console.error('Error parsing localStorage favorites:', err);
+        favorites = [];
+      }
+    }
+  }
+}
+
+// Save favorites to database (no longer needed as individual function since we call API directly)
+// Keeping localStorage as backup for offline functionality
+function saveFavoritesToLocalStorage() {
+  try {
+    localStorage.setItem('quotation-favorites', JSON.stringify(favorites));
+    console.log('Favorites backed up to localStorage:', favorites);
+  } catch (error) {
+    console.error('Error saving favorites to localStorage:', error);
+  }
+}
+
+// Check if a record is favorited
+function isRecordFavorited(recordId) {
+  return favorites.includes(recordId);
+}
+
+// Toggle favorite status of a record
+async function toggleFavorite(recordId, buttonElement) {
+  const wasFavorited = isRecordFavorited(recordId);
+  
+  try {
+    if (wasFavorited) {
+      // Remove from favorites
+      console.log(`Removing record ${recordId} from favorites...`);
+      const response = await fetch(`/api/favorites/${recordId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const index = favorites.indexOf(recordId);
+        if (index > -1) {
+          favorites.splice(index, 1);
+        }
+        buttonElement.classList.remove('favorited');
+        buttonElement.title = 'Add to favorites';
+        console.log(`Successfully removed record ${recordId} from favorites`);
+      } else {
+        throw new Error(`Failed to remove from favorites: ${response.status}`);
+      }
+    } else {
+      // Add to favorites
+      console.log(`Adding record ${recordId} to favorites...`);
+      const response = await fetch(`/api/favorites/${recordId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        if (!favorites.includes(recordId)) {
+          favorites.push(recordId);
+        }
+        buttonElement.classList.add('favorited');
+        buttonElement.title = 'Remove from favorites';
+        console.log(`Successfully added record ${recordId} to favorites`);
+      } else {
+        throw new Error(`Failed to add to favorites: ${response.status}`);
+      }
+    }
+    
+    // Backup to localStorage
+    saveFavoritesToLocalStorage();
+    
+    // If we're currently showing only favorites, refresh the view
+    if (showingOnlyFavorites) {
+      setTimeout(() => {
+        filterFavoriteRecords();
+      }, 100);
+    }
+    
+  } catch (error) {
+    console.error('Error toggling favorite:', error);
+    alert(`Error updating favorite: ${error.message}`);
+    
+    // Revert button state on error
+    if (wasFavorited) {
+      buttonElement.classList.add('favorited');
+      buttonElement.title = 'Remove from favorites';
+    } else {
+      buttonElement.classList.remove('favorited');
+      buttonElement.title = 'Add to favorites';
+    }
+  }
+}
+
+// Filter to show only favorite records
+function toggleFavoritesFilter() {
+  showingOnlyFavorites = true;
+  document.getElementById('showFavoritesBtn').classList.add('active');
+  document.getElementById('showAllBtn').classList.remove('active');
+  filterFavoriteRecords();
+}
+
+// Show all records
+function showAllRecords() {
+  showingOnlyFavorites = false;
+  document.getElementById('showFavoritesBtn').classList.remove('active');
+  document.getElementById('showAllBtn').classList.add('active');
+  renderRecords(allRecords);
+}
+
+// Filter and display only favorite records
+function filterFavoriteRecords() {
+  const favoriteRecords = allRecords.filter(record => isRecordFavorited(record.id));
+  renderRecords(favoriteRecords);
+}
+
+// Render records in the table
+function renderRecords(records) {
+  const recordsTableBody = document.getElementById('records-table-body');
+  recordsTableBody.innerHTML = ''; // Clear existing content
+
+  if (records.length === 0) {
+    const message = showingOnlyFavorites ? 'No favorite records found' : 'No records found';
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="7" style="text-align: center;">${message}</td>`;
+    recordsTableBody.appendChild(row);
+    return;
+  }
+
+  records.forEach((record, index) => {
+    console.log(`Processing record ${index + 1}:`, record);
+    const row = document.createElement('tr');
+
+    // Check if this record is favorited
+    const isFavorited = isRecordFavorited(record.id);
+
+    row.innerHTML = `
+      <td>
+        <button class="btn-favorite ${isFavorited ? 'favorited' : ''}" 
+                onclick="toggleFavorite(${record.id}, this)" 
+                title="${isFavorited ? 'Remove from favorites' : 'Add to favorites'}">
+          <i class="fas fa-star"></i>
+        </button>
+      </td>
+      <td>${record.id}</td>
+      <td>${record.platform}</td>
+      <td>${record.customer_name}</td>
+      <td>${new Date(record.created_at).toLocaleDateString()}</td>
+      <td>$${record.final_price}</td>
+      <td>
+        <button class="btn-view" onclick="viewRecord(${record.id})" title="View Record">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button class="btn-edit" onclick="editRecord(${record.id})" title="Edit Record">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-delete" onclick="deleteRecord(${record.id})" title="Delete Record">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    `;
+
+    recordsTableBody.appendChild(row);
+    console.log(`Row ${index + 1} added to table`);
+  });
+}
 
 // Function to view a record
 async function viewRecord(recordId) {

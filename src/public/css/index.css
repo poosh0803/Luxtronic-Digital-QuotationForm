@@ -9,19 +9,20 @@ body {
 }
 
 table th:nth-child(1), table td:nth-child(1) {
-  width: 8% !important;
+  width: 6% !important;
+  text-align: center;
 }
 
 table th:nth-child(2), table td:nth-child(2) {
-  width: 18% !important;
+  width: 8% !important;
 }
 
 table th:nth-child(3), table td:nth-child(3) {
-  width: 25% !important;
+  width: 12% !important;
 }
 
 table th:nth-child(4), table td:nth-child(4) {
-  width: 22% !important;
+  width: 25% !important;
 }
 
 table th:nth-child(5), table td:nth-child(5) {
@@ -29,7 +30,11 @@ table th:nth-child(5), table td:nth-child(5) {
 }
 
 table th:nth-child(6), table td:nth-child(6) {
-  width: 12% !important;
+  width: 16% !important;
+}
+
+table th:nth-child(7), table td:nth-child(7) {
+  width: 18% !important;
   text-align: center;
 }
 
@@ -144,8 +149,8 @@ header {
 }
 
 table {
-  width: 85%;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1400px;
   border-collapse: collapse;
   margin: 20px auto;
   background-color: #fff;
@@ -193,19 +198,20 @@ table td select {
 
 /* Specific column widths for better layout */
 table th:nth-child(1), table td:nth-child(1) {
-  width: 10% !important;
+  width: 6% !important;
+  text-align: center;
 }
 
 table th:nth-child(2), table td:nth-child(2) {
-  width: 30% !important;
+  width: 8% !important;
 }
 
 table th:nth-child(3), table td:nth-child(3) {
-  width: 25% !important;
+  width: 12% !important;
 }
 
 table th:nth-child(4), table td:nth-child(4) {
-  width: 20% !important;
+  width: 25% !important;
 }
 
 table th:nth-child(5), table td:nth-child(5) {
@@ -213,12 +219,16 @@ table th:nth-child(5), table td:nth-child(5) {
 }
 
 table th:nth-child(6), table td:nth-child(6) {
-  width: 20% !important;
+  width: 16% !important;
+}
+
+table th:nth-child(7), table td:nth-child(7) {
+  width: 18% !important;
   text-align: center; 
 }
 
 /* Action Buttons Styling */
-.btn-view, .btn-edit, .btn-delete {
+.btn-view, .btn-edit, .btn-delete, .btn-favorite {
   background: none;
   border: none;
   padding: 6px 8px;
@@ -227,6 +237,75 @@ table th:nth-child(6), table td:nth-child(6) {
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
+}
+
+.btn-favorite {
+  color: #ffc107;
+  padding: 4px 6px;
+}
+
+.btn-favorite:hover {
+  background-color: #ffc107;
+  color: white;
+}
+
+.btn-favorite.favorited {
+  background-color: #ffc107;
+  color: white;
+}
+
+.btn-favorite.favorited:hover {
+  background-color: #e0a800;
+  color: white;
+}
+
+/* Filter Controls Styling */
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.records-section {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 20px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-filter {
+  background: none;
+  border: 2px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-filter:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.btn-filter.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.btn-filter.active:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
 }
 
 .btn-view {
@@ -409,6 +488,7 @@ table th:nth-child(6), table td:nth-child(6) {
   margin: 0;
   background-color: transparent;
   box-shadow: none;
+  table-layout: fixed;
 }
 
 .modal-table th {
@@ -437,25 +517,25 @@ table th:nth-child(6), table td:nth-child(6) {
   background-color: #e9ecef;
 }
 
-/* Component table column widths */
+/* Component table column widths - Updated for better proportions */
 .modal-table th:nth-child(1), .modal-table td:nth-child(1) {
-  width: 8% !important;
+  width: 12% !important;
   font-weight: bold;
 }
 
 .modal-table th:nth-child(2), .modal-table td:nth-child(2) {
-  width: 57%;
+  width: 45% !important;
 }
 
 .modal-table th:nth-child(3), .modal-table td:nth-child(3) {
-  width: 5% !important;
-  max-width: 50px !important;
-  min-width: 30px !important;
+  width: 8% !important;
+  max-width: 60px !important;
+  min-width: 40px !important;
   text-align: center;
 }
 
 .modal-table th:nth-child(4), .modal-table td:nth-child(4) {
-  width: 30%;
+  width: 35% !important;
 }
 
 .component-empty {
