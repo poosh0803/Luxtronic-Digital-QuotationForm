@@ -353,4 +353,92 @@ router.delete('/quotation/:id', async (req, res) => {
   }
 });
 
+// ===== FAVORITES API ENDPOINTS =====
+
+// Get all favorite quotation IDs
+router.get('/favorites', async (req, res) => {
+  try {
+    console.log('=== GET FAVORITES ===');
+    const result = await pool.query('SELECT quotation_id FROM favorites ORDER BY created_at DESC');
+    const favoriteIds = result.rows.map(row => row.quotation_id);
+    console.log('Retrieved favorite IDs:', favoriteIds);
+    res.json(favoriteIds);
+  } catch (err) {
+    console.error('Error getting favorites:', err.message);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
+// Add a quotation to favorites
+router.post('/favorites/:quotationId', async (req, res) => {
+  const { quotationId } = req.params;
+  try {
+    console.log('=== ADD TO FAVORITES ===');
+    console.log('Adding quotation ID to favorites:', quotationId);
+    
+    // Check if quotation exists
+    const quotationCheck = await pool.query('SELECT id FROM quotations WHERE id = $1', [quotationId]);
+    if (quotationCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Quotation not found' });
+    }
+    
+    // Add to favorites (will fail silently if already exists due to UNIQUE constraint)
+    const result = await pool.query(
+      'INSERT INTO favorites (quotation_id) VALUES ($1) ON CONFLICT (quotation_id) DO NOTHING RETURNING *',
+      [quotationId]
+    );
+    
+    if (result.rows.length > 0) {
+      console.log('Added to favorites:', result.rows[0]);
+      res.status(201).json({ message: 'Added to favorites', favorite: result.rows[0] });
+    } else {
+      console.log('Already in favorites:', quotationId);
+      res.json({ message: 'Already in favorites' });
+    }
+    
+  } catch (err) {
+    console.error('Error adding to favorites:', err.message);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
+// Remove a quotation from favorites
+router.delete('/favorites/:quotationId', async (req, res) => {
+  const { quotationId } = req.params;
+  try {
+    console.log('=== REMOVE FROM FAVORITES ===');
+    console.log('Removing quotation ID from favorites:', quotationId);
+    
+    const result = await pool.query(
+      'DELETE FROM favorites WHERE quotation_id = $1 RETURNING *',
+      [quotationId]
+    );
+    
+    if (result.rows.length > 0) {
+      console.log('Removed from favorites:', result.rows[0]);
+      res.json({ message: 'Removed from favorites', removed: result.rows[0] });
+    } else {
+      console.log('Not found in favorites:', quotationId);
+      res.status(404).json({ error: 'Not found in favorites' });
+    }
+    
+  } catch (err) {
+    console.error('Error removing from favorites:', err.message);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
+// Check if a quotation is favorited
+router.get('/favorites/:quotationId', async (req, res) => {
+  const { quotationId } = req.params;
+  try {
+    const result = await pool.query('SELECT id FROM favorites WHERE quotation_id = $1', [quotationId]);
+    const isFavorited = result.rows.length > 0;
+    res.json({ isFavorited });
+  } catch (err) {
+    console.error('Error checking favorite status:', err.message);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 module.exports = router;
