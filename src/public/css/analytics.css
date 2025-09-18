@@ -1252,13 +1252,13 @@
 }
 
 .rank-column {
-    width: 60px;
+    width: 40px;
     text-align: center;
 }
 
-.product-column {
-    width: 40%;
-    min-width: 200px;
+table.pricing-table .product-column {
+    width: 50% !important;
+    min-width: 250px !important;
 }
 
 .price-column {
@@ -1266,21 +1266,21 @@
     text-align: right;
 }
 
-.store-column {
-    width: 150px;
+table.pricing-table .store-column {
+    width: 120px !important;
 }
 
-.availability-column {
-    width: 120px;
+table.pricing-table .availability-column {
+    width: 120px !important;
 }
 
-.source-column {
-    width: 100px;
+table.pricing-table .source-column {
+    width: 100px !important;
     text-align: center;
 }
 
-.action-column {
-    width: 60px;
+table.pricing-table .action-column {
+    width: 60px !important;
     text-align: center;
 }
 
