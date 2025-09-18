@@ -635,12 +635,9 @@ async function deleteRecord(recordId) {
 // Close modal when clicking outside of it
 window.onclick = function(event) {
   const viewModal = document.getElementById('viewModal');
-  const editModal = document.getElementById('editModal');
   
   if (event.target === viewModal) {
     closeViewModal();
-  } else if (event.target === editModal) {
-    closeEditModal();
   }
 }
 
