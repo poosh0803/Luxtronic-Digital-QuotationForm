@@ -209,13 +209,33 @@ async function loadQuotationHistory() {
             
             const option = document.createElement('option');
             option.value = quotation.id;
-            option.textContent = `${quotation.customer_name} - ${date} ($${parseFloat(quotation.final_price).toLocaleString()})`;
+            option.textContent = `${quotation.customer_name} - ${date} (${parseFloat(quotation.final_price).toLocaleString()})`;
             
             selector.appendChild(option);
         });
-        
-        // Display the latest quotation by default
-        displayQuotation(quotations[0]);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const recordData = urlParams.get('record');
+
+        if (recordData) {
+            try {
+                const record = JSON.parse(decodeURIComponent(recordData));
+                displayQuotation(record);
+                // Optionally, set the dropdown to the correct record
+                selector.value = record.id;
+            } catch (error) {
+                console.error('Error parsing record data from URL:', error);
+                // Fallback to loading latest quotation
+                if (quotations.length > 0) {
+                    displayQuotation(quotations[0]);
+                }
+            }
+        } else {
+            // Display the latest quotation by default
+            if (quotations.length > 0) {
+                displayQuotation(quotations[0]);
+            }
+        }
         
     } catch (error) {
         console.error('Error loading quotation history:', error);

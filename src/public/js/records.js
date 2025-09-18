@@ -238,6 +238,9 @@ function renderRecords(records) {
       <td>${new Date(record.created_at).toLocaleDateString()}</td>
       <td>$${record.final_price}</td>
       <td>
+        <button class="btn-display" onclick="displayOnIndex(${record.id})" title="Display on Index">
+          <i class="fas fa-desktop"></i>
+        </button>
         <button class="btn-view" onclick="viewRecord(${record.id})" title="View Record">
           <i class="fas fa-eye"></i>
         </button>
@@ -254,6 +257,18 @@ function renderRecords(records) {
     console.log(`Row ${index + 1} added to table`);
   });
 }
+
+function displayOnIndex(recordId) {
+  const record = allRecords.find(r => r.id === recordId);
+  if (record) {
+    const recordData = encodeURIComponent(JSON.stringify(record));
+    window.location.href = `/?record=${recordData}`;
+  } else {
+    console.error('Record not found for display on index');
+    alert('Could not find the record to display.');
+  }
+}
+
 
 // Function to view a record
 async function viewRecord(recordId) {

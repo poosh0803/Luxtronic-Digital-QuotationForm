@@ -39,7 +39,7 @@ table th:nth-child(7), table td:nth-child(7) {
 }
 
 /* Action Buttons Styling */
-.btn-view, .btn-edit, .btn-delete {
+.btn-view, .btn-edit, .btn-delete, .btn-display {
   background: none;
   border: none;
   padding: 6px 8px;
@@ -77,8 +77,13 @@ table th:nth-child(7), table td:nth-child(7) {
   color: white;
 }
 
-h1 {
-  margin-top: 20px;
+.btn-display {
+  color: #988b00;
+}
+
+.btn-display:hover {
+  background-color: #988b00;
+  color: white;
 }
 
 form {
