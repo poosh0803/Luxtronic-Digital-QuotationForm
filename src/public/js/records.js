@@ -212,7 +212,7 @@ function renderRecords(records) {
   if (records.length === 0) {
     const message = showingOnlyFavorites ? 'No favorite records found' : 'No records found';
     const row = document.createElement('tr');
-    row.innerHTML = `<td colspan="7" style="text-align: center;">${message}</td>`;
+    row.innerHTML = `<td colspan="8" style="text-align: center;">${message}</td>`;
     recordsTableBody.appendChild(row);
     return;
   }
@@ -236,7 +236,8 @@ function renderRecords(records) {
       <td>${record.platform}</td>
       <td>${record.customer_name}</td>
       <td>${new Date(record.created_at).toLocaleDateString()}</td>
-      <td>$${record.final_price}</td>
+      <td class="no-print">${record.calculated_price}</td>
+      <td>${record.final_price}</td>
       <td>
         <button class="btn-display" onclick="displayOnIndex(${record.id})" title="Display on Index">
           <i class="fas fa-desktop"></i>
@@ -302,7 +303,8 @@ async function viewRecord(recordId) {
     document.getElementById('modal-platform').textContent = record.platform || 'N/A';
     document.getElementById('modal-customer').textContent = record.customer_name || 'N/A';
     document.getElementById('modal-date').textContent = new Date(record.created_at).toLocaleDateString();
-    document.getElementById('modal-price').textContent = `$${record.final_price || '0.00'} AUD`;
+    document.getElementById('modal-calculated-price').textContent = `${record.calculated_price || '0.00'} AUD`;
+    document.getElementById('modal-price').textContent = `${record.final_price || '0.00'} AUD`;
     
     // Populate components table (show ALL components like in new quotation form)
     const componentsTable = document.getElementById('modal-components-table');
@@ -310,19 +312,19 @@ async function viewRecord(recordId) {
     
     // Define ALL component mappings (same order as new quotation form)
     const components = [
-      { name: 'CPU', details: record.cpu_details, unit: record.cpu_unit, note: record.cpu_upgrade_note },
-      { name: 'CPU Cooling', details: record.cpu_cooling_details, unit: record.cpu_cooling_unit, note: record.cpu_cooling_upgrade_note },
-      { name: 'Motherboard', details: record.motherboard_details, unit: record.motherboard_unit, note: record.motherboard_upgrade_note },
-      { name: 'RAM', details: record.ram_details, unit: record.ram_unit, note: record.ram_upgrade_note },
-      { name: 'Storage 1', details: record.storage1_details, unit: record.storage1_unit, note: record.storage1_upgrade_note },
-      { name: 'Storage 2', details: record.storage2_details, unit: record.storage2_unit, note: record.storage2_upgrade_note },
-      { name: 'GPU', details: record.gpu_details, unit: record.gpu_unit, note: record.gpu_upgrade_note },
-      { name: 'Case', details: record.case_details, unit: record.case_unit, note: record.case_upgrade_note },
-      { name: 'PSU', details: record.psu_details, unit: record.psu_unit, note: record.psu_upgrade_note },
-      { name: 'System Fan', details: record.sys_fan_details, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note },
-      { name: 'OS', details: record.os_details, unit: record.os_unit, note: record.os_upgrade_note },
-      { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note },
-      { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note }
+      { name: 'CPU', details: record.cpu_details, price: record.cpu_price, unit: record.cpu_unit, note: record.cpu_upgrade_note },
+      { name: 'CPU Cooling', details: record.cpu_cooling_details, price: record.cpu_cooling_price, unit: record.cpu_cooling_unit, note: record.cpu_cooling_upgrade_note },
+      { name: 'Motherboard', details: record.motherboard_details, price: record.motherboard_price, unit: record.motherboard_unit, note: record.motherboard_upgrade_note },
+      { name: 'RAM', details: record.ram_details, price: record.ram_price, unit: record.ram_unit, note: record.ram_upgrade_note },
+      { name: 'Storage 1', details: record.storage1_details, price: record.storage1_price, unit: record.storage1_unit, note: record.storage1_upgrade_note },
+      { name: 'Storage 2', details: record.storage2_details, price: record.storage2_price, unit: record.storage2_unit, note: record.storage2_upgrade_note },
+      { name: 'GPU', details: record.gpu_details, price: record.gpu_price, unit: record.gpu_unit, note: record.gpu_upgrade_note },
+      { name: 'Case', details: record.case_details, price: record.case_price, unit: record.case_unit, note: record.case_upgrade_note },
+      { name: 'PSU', details: record.psu_details, price: record.psu_price, unit: record.psu_unit, note: record.psu_upgrade_note },
+      { name: 'System Fan', details: record.sys_fan_details, price: record.sys_fan_price, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note },
+      { name: 'OS', details: record.os_details, price: record.os_price, unit: record.os_unit, note: record.os_upgrade_note },
+      { name: 'Monitor', details: record.monitor_details, price: record.monitor_price, unit: record.monitor_unit, note: record.monitor_upgrade_note },
+      { name: 'Others', details: record.others_details, price: record.others_price, unit: record.others_unit, note: record.others_upgrade_note }
     ];
     
     // Show ALL components (not just active ones) - same as new quotation form
@@ -342,6 +344,12 @@ async function viewRecord(recordId) {
         detailsCell.textContent = '-';
       }
       row.appendChild(detailsCell);
+
+      // Price
+      const priceCell = document.createElement('td');
+      priceCell.textContent = `${component.price || '0.00'}`;
+      priceCell.style.textAlign = 'center';
+      row.appendChild(priceCell);
       
       // Unit
       const unitCell = document.createElement('td');
@@ -435,6 +443,7 @@ async function fetchRecordForEdit(recordId) {
     document.getElementById('edit-modal-platform').value = platformValue;
     document.getElementById('edit-modal-customer').value = record.customer_name || '';
     document.getElementById('edit-modal-date').textContent = new Date(record.created_at).toLocaleDateString();
+    document.getElementById('edit-modal-calculated-price').value = record.calculated_price || '0.00';
     document.getElementById('edit-modal-price').value = record.final_price || '0.00';
     
     // Populate components table with editable fields
@@ -537,6 +546,7 @@ async function saveRecord() {
     const formData = {
       platform: document.getElementById('edit-modal-platform').value,
       customer_name: document.getElementById('edit-modal-customer').value,
+      price: parseFloat(document.getElementById('edit-modal-real-price').value) || 0,
       final_price: parseFloat(document.getElementById('edit-modal-price').value) || 0
     };
     

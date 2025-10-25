@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Quotation</title>
-  <link rel="stylesheet" href="css/index.css">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="css/darkmode.css">
+  <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- <link rel="stylesheet" href="css/dashboard.css"> -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"> -->
+  <!-- <link rel="stylesheet" href="css/darkmode.css"> -->
 </head>
 <body>
   <!-- Header -->
@@ -60,16 +60,18 @@
     <table>
       <thead>
         <tr>
-          <th>Part</th>
-          <th>Details</th>
-          <th>Unit</th>
-          <th>Upgrade Note</th>
+          <th style="width: 10%;">Part</th>
+          <th style="width: 40%;">Details</th>
+          <th style="width: 15%;">Price</th>
+          <th style="width: 10%;">Unit</th>
+          <th style="width: 25%;">Upgrade Note</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>CPU</td>
           <td><input type="text" name="cpu-details"></td>
+          <td><input type="number" name="cpu-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="cpu-unit">
               <option value="0">0</option>
@@ -83,6 +85,7 @@
         <tr>
           <td>CPU Cooling</td>
           <td><input type="text" name="cpu-cooling-details"></td>
+          <td><input type="number" name="cpu-cooling-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="cpu-cooling-unit">
               <option value="0">0</option>
@@ -96,6 +99,7 @@
         <tr>
           <td>Motherboard</td>
           <td><input type="text" name="motherboard-details"></td>
+          <td><input type="number" name="motherboard-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="motherboard-unit">
               <option value="0">0</option>
@@ -109,6 +113,7 @@
         <tr>
           <td>RAM</td>
           <td><input type="text" name="ram-details"></td>
+          <td><input type="number" name="ram-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="ram-unit">
               <option value="0">0</option>
@@ -122,6 +127,7 @@
         <tr>
           <td>Storage 1</td>
           <td><input type="text" name="storage1-details"></td>
+          <td><input type="number" name="storage1-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="storage1-unit">
               <option value="0">0</option>
@@ -135,6 +141,7 @@
         <tr>
           <td>Storage 2</td>
           <td><input type="text" name="storage2-details"></td>
+          <td><input type="number" name="storage2-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="storage2-unit">
               <option value="0">0</option>
@@ -148,6 +155,7 @@
         <tr>
           <td>GPU</td>
           <td><input type="text" name="gpu-details"></td>
+          <td><input type="number" name="gpu-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="gpu-unit">
               <option value="0">0</option>
@@ -161,6 +169,7 @@
         <tr>
           <td>Case</td>
           <td><input type="text" name="case-details"></td>
+          <td><input type="number" name="case-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="case-unit">
               <option value="0">0</option>
@@ -174,6 +183,7 @@
         <tr>
           <td>PSU</td>
           <td><input type="text" name="psu-details"></td>
+          <td><input type="number" name="psu-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="psu-unit">
               <option value="0">0</option>
@@ -187,6 +197,7 @@
         <tr>
           <td>System Fan</td>
           <td><input type="text" name="sys-fan-details"></td>
+          <td><input type="number" name="sys-fan-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="sys-fan-unit">
               <option value="0">0</option>
@@ -203,6 +214,7 @@
         <tr>
           <td>OS</td>
           <td><input type="text" name="os-details"></td>
+          <td><input type="number" name="os-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="os-unit">
               <option value="0">0</option>
@@ -216,6 +228,7 @@
         <tr>
           <td>Monitor</td>
           <td><input type="text" name="monitor-details"></td>
+          <td><input type="number" name="monitor-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="monitor-unit">
               <option value="0">0</option>
@@ -229,6 +242,7 @@
         <tr>
           <td>Others</td>
           <td><input type="text" name="others-details"></td>
+          <td><input type="number" name="others-price" placeholder="Enter price" step="0.01" min="0"></td>
           <td>
             <select name="others-unit">
               <option value="0">0</option>
@@ -247,6 +261,11 @@
       <div class="price-input-container">
         <label for="customer-name">Customer Name:</label>
         <input type="text" id="customer-name" name="customer-name" placeholder="Enter customer name">
+      </div>
+      <div class="price-input-container">
+        <label for="calculated-price">Calculated Price:</label>
+        <input type="number" id="calculated-price" name="calculated-price" placeholder="Calculated price" step="0.01" min="0" readonly>
+        <span class="currency">AUD</span>
       </div>
       <div class="price-input-container">
         <label for="final-price">Final Price:</label>
