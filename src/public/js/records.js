@@ -274,6 +274,7 @@ function renderRecords(records) {
         </button>
       </td>
     `;
+    recordsTableBody.appendChild(row);
   });
 }
 
@@ -560,6 +561,15 @@ async function fetchRecordForEdit(recordId) {
       </tr>
     `;
   }
+}
+
+function updateTotalCalculatedPrice() {
+    const priceInputs = document.querySelectorAll('#edit-modal-components-table .price-input');
+    let total = 0;
+    priceInputs.forEach(input => {
+        total += parseFloat(input.value) || 0;
+    });
+    document.getElementById('edit-modal-calculated-price').textContent = total.toFixed(2);
 }
 
 async function saveRecord() {

@@ -170,7 +170,11 @@
             </div>
           </div>
           <div class="info-row">
-            <div class="info-item full-width">
+            <div class="info-item">
+              <label>Calculated Price (AUD):</label>
+              <span id="edit-modal-calculated-price" class="price-display">0.00</span>
+            </div>
+            <div class="info-item">
               <label>Final Price (AUD):</label>
               <input type="number" id="edit-modal-price" class="form-input price-input" step="0.01" min="0" placeholder="0.00">
             </div>
@@ -187,6 +191,7 @@
                 <th>Details</th>
                 <th>Unit</th>
                 <th>Upgrade Note</th>
+                <th>Price</th>
               </tr>
             </thead>
             <tbody id="edit-modal-components-table">
