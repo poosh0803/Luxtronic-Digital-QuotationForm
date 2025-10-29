@@ -5,7 +5,6 @@ function getTableData() {
   
   // Add basic form fields
   formData.append('customer_name', document.getElementById('customer-name')?.value || '');
-  formData.append('calculated_price', document.getElementById('calculated-price')?.value || '');
   formData.append('final_price', document.getElementById('final-price')?.value || '');
   formData.append('platform', document.getElementById('slider').style.left === '0px' ? 'AMD' : 'INTEL');
   formData.append('created_at', new Date().toISOString());
