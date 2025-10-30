@@ -101,42 +101,55 @@ router.post('/quotation', (req, res, next) => {
     created_at,
     cpu_details,
     cpu_unit,
+    cpu_price,
     cpu_upgrade_note,
     cpu_cooling_details,
     cpu_cooling_unit,
+    cpu_cooling_price,
     cpu_cooling_upgrade_note,
     motherboard_details,
     motherboard_unit,
+    motherboard_price,
     motherboard_upgrade_note,
     ram_details,
     ram_unit,
+    ram_price,
     ram_upgrade_note,
     storage1_details,
     storage1_unit,
+    storage1_price,
     storage1_upgrade_note,
     storage2_details,
     storage2_unit,
+    storage2_price,
     storage2_upgrade_note,
     gpu_details,
     gpu_unit,
+    gpu_price,
     gpu_upgrade_note,
     case_details,
     case_unit,
+    case_price,
     case_upgrade_note,
     psu_details,
     psu_unit,
+    psu_price,
     psu_upgrade_note,
     sys_fan_details,
     sys_fan_unit,
+    sys_fan_price,
     sys_fan_upgrade_note,
     os_details,
     os_unit,
+    os_price,
     os_upgrade_note,
     monitor_details,
     monitor_unit,
+    monitor_price,
     monitor_upgrade_note,
     others_details,
     others_unit,
+    others_price,
     others_upgrade_note
   } = req.body;
 
@@ -144,32 +157,35 @@ router.post('/quotation', (req, res, next) => {
   const parseIntOrNull = (value) => {
     return (value === '' || value === null || value === undefined) ? null : parseInt(value, 10);
   };
+  const parseFloatOrNull = (value) => {
+    return (value === '' || value === null || value === undefined) ? null : parseFloat(value);
+  };
 
   try {
     const result = await pool.query(
       `INSERT INTO quotations (
-        customer_name, price, final_price, platform, cpu_details, cpu_unit, cpu_upgrade_note,
-        cpu_cooling_details, cpu_cooling_unit, cpu_cooling_upgrade_note, motherboard_details,
-        motherboard_unit, motherboard_upgrade_note, ram_details, ram_unit, ram_upgrade_note,
-        storage1_details, storage1_unit, storage1_upgrade_note, storage2_details, storage2_unit,
-        storage2_upgrade_note, gpu_details, gpu_unit, gpu_upgrade_note, case_details, case_unit,
-        case_upgrade_note, psu_details, psu_unit, psu_upgrade_note, sys_fan_details, sys_fan_unit,
-        sys_fan_upgrade_note, os_details, os_unit, os_upgrade_note, monitor_details, monitor_unit,
-        monitor_upgrade_note, others_details, others_unit, others_upgrade_note, created_at
+        customer_name, price, final_price, platform, cpu_details, cpu_unit, cpu_price, cpu_upgrade_note,
+        cpu_cooling_details, cpu_cooling_unit, cpu_cooling_price, cpu_cooling_upgrade_note, motherboard_details,
+        motherboard_unit, motherboard_price, motherboard_upgrade_note, ram_details, ram_unit, ram_price, ram_upgrade_note,
+        storage1_details, storage1_unit, storage1_price, storage1_upgrade_note, storage2_details, storage2_unit,
+        storage2_price, storage2_upgrade_note, gpu_details, gpu_unit, gpu_price, gpu_upgrade_note, case_details, case_unit,
+        case_price, case_upgrade_note, psu_details, psu_unit, psu_price, psu_upgrade_note, sys_fan_details, sys_fan_unit,
+        sys_fan_price, sys_fan_upgrade_note, os_details, os_unit, os_price, os_upgrade_note, monitor_details, monitor_unit,
+        monitor_price, monitor_upgrade_note, others_details, others_unit, others_price, others_upgrade_note, created_at
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
         $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
-        $39, $40, $41, $42, $43, $44
+        $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57
       ) RETURNING *`,
       [
-        customer_name, price, final_price, platform, cpu_details, parseIntOrNull(cpu_unit), cpu_upgrade_note,
-        cpu_cooling_details, parseIntOrNull(cpu_cooling_unit), cpu_cooling_upgrade_note, motherboard_details,
-        parseIntOrNull(motherboard_unit), motherboard_upgrade_note, ram_details, parseIntOrNull(ram_unit), ram_upgrade_note,
-        storage1_details, parseIntOrNull(storage1_unit), storage1_upgrade_note, storage2_details, parseIntOrNull(storage2_unit),
-        storage2_upgrade_note, gpu_details, parseIntOrNull(gpu_unit), gpu_upgrade_note, case_details, parseIntOrNull(case_unit),
-        case_upgrade_note, psu_details, parseIntOrNull(psu_unit), psu_upgrade_note, sys_fan_details, parseIntOrNull(sys_fan_unit),
-        sys_fan_upgrade_note, os_details, parseIntOrNull(os_unit), os_upgrade_note, monitor_details, parseIntOrNull(monitor_unit),
-        monitor_upgrade_note, others_details, parseIntOrNull(others_unit), others_upgrade_note, created_at
+        customer_name, parseFloatOrNull(price), parseFloatOrNull(final_price), platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
+        cpu_cooling_details, parseIntOrNull(cpu_cooling_unit), parseFloatOrNull(cpu_cooling_price), cpu_cooling_upgrade_note, motherboard_details,
+        parseIntOrNull(motherboard_unit), parseFloatOrNull(motherboard_price), motherboard_upgrade_note, ram_details, parseIntOrNull(ram_unit), parseFloatOrNull(ram_price), ram_upgrade_note,
+        storage1_details, parseIntOrNull(storage1_unit), parseFloatOrNull(storage1_price), storage1_upgrade_note, storage2_details, parseIntOrNull(storage2_unit),
+        parseFloatOrNull(storage2_price), storage2_upgrade_note, gpu_details, parseIntOrNull(gpu_unit), parseFloatOrNull(gpu_price), gpu_upgrade_note, case_details, parseIntOrNull(case_unit),
+        parseFloatOrNull(case_price), case_upgrade_note, psu_details, parseIntOrNull(psu_unit), parseFloatOrNull(psu_price), psu_upgrade_note, sys_fan_details, parseIntOrNull(sys_fan_unit),
+        parseFloatOrNull(sys_fan_price), sys_fan_upgrade_note, os_details, parseIntOrNull(os_unit), parseFloatOrNull(os_price), os_upgrade_note, monitor_details, parseIntOrNull(monitor_unit),
+        parseFloatOrNull(monitor_price), monitor_upgrade_note, others_details, parseIntOrNull(others_unit), parseFloatOrNull(others_price), others_upgrade_note, created_at
       ]
     );
     console.log('Quotation created successfully:', result.rows[0]);
