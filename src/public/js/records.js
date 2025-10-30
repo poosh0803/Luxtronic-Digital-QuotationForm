@@ -537,6 +537,7 @@ async function fetchRecordForEdit(recordId) {
       priceInput.step = '0.01';
       priceInput.className = 'price-input';
       priceInput.setAttribute('data-field', `${component.field}_price`);
+      priceInput.addEventListener('input', updateTotalCalculatedPrice);
       priceCell.appendChild(priceInput);
       row.appendChild(priceCell);
       componentsTable.appendChild(row);
