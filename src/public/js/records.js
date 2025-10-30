@@ -514,6 +514,7 @@ async function fetchRecordForEdit(recordId) {
       unitInput.step = '1';
       unitInput.className = 'unit-input';
       unitInput.setAttribute('data-field', `${component.field}_unit`);
+      unitInput.addEventListener('input', updateTotalCalculatedPrice);
       unitCell.appendChild(unitInput);
       row.appendChild(unitCell);
       
@@ -536,12 +537,11 @@ async function fetchRecordForEdit(recordId) {
       priceInput.step = '0.01';
       priceInput.className = 'price-input';
       priceInput.setAttribute('data-field', `${component.field}_price`);
-      priceInput.addEventListener('input', updateTotalCalculatedPrice);
       priceCell.appendChild(priceInput);
       row.appendChild(priceCell);
-      
       componentsTable.appendChild(row);
     });
+    updateTotalCalculatedPrice();
     
   } catch (error) {
     console.error('Error fetching record details for editing:', error);
@@ -564,10 +564,18 @@ async function fetchRecordForEdit(recordId) {
 }
 
 function updateTotalCalculatedPrice() {
-    const priceInputs = document.querySelectorAll('#edit-modal-components-table .price-input');
+    const rows = document.querySelectorAll('#edit-modal-components-table tr');
     let total = 0;
-    priceInputs.forEach(input => {
-        total += parseFloat(input.value) || 0;
+    rows.forEach(row => {
+        const priceInput = row.querySelector('.price-input');
+        const unitInput = row.querySelector('.unit-input');
+        if (priceInput && unitInput) {
+            const price = parseFloat(priceInput.value) || 0;
+            const unit = parseInt(unitInput.value) || 0;
+            if (unit > 0) {
+                total += price * unit;
+            }
+        }
     });
     document.getElementById('edit-modal-calculated-price').textContent = total.toFixed(2);
 }
