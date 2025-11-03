@@ -293,30 +293,34 @@ function displayOnIndex(recordId) {
 // Function to view a record
 async function viewRecord(recordId) {
   console.log('Viewing record with ID:', recordId);
-  
-  // Show modal with loading state
-  document.getElementById('viewModal').style.display = 'block';
+  const modal = document.getElementById('viewModal');
+  const modalContent = modal.querySelector('.modal-content');
+
+  // Show modal and loading state
+  modal.style.display = 'block';
+  modalContent.classList.add('loading');
+
   document.getElementById('modal-id').textContent = 'Loading...';
   document.getElementById('modal-platform').textContent = 'Loading...';
   document.getElementById('modal-customer').textContent = 'Loading...';
   document.getElementById('modal-date').textContent = 'Loading...';
   document.getElementById('modal-price').textContent = 'Loading...';
+  document.getElementById('modal-calculated-price').textContent = 'Loading...';
   document.getElementById('modal-components-table').innerHTML = '<tr><td colspan="4" style="text-align: center;">Loading component details...</td></tr>';
-  
+
   try {
-    // Fetch detailed record data from API
     console.log('Fetching record details from /api/quotation/' + recordId);
     const response = await fetch(`/api/quotation/${recordId}`);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Failed to fetch record details:', errorText);
       throw new Error(`Failed to fetch record: ${response.status}`);
     }
-    
+
     const record = await response.json();
     console.log('Record details fetched:', record);
-    
+
     // Populate modal with detailed record data
     document.getElementById('modal-id').textContent = record.id;
     document.getElementById('modal-platform').textContent = record.platform || 'N/A';
@@ -324,12 +328,11 @@ async function viewRecord(recordId) {
     document.getElementById('modal-date').textContent = new Date(record.created_at).toLocaleDateString();
     document.getElementById('modal-calculated-price').textContent = `${calculateRecordPrice(record) || '0.00'} AUD`;
     document.getElementById('modal-price').textContent = `${record.final_price || '0.00'} AUD`;
-    
-    // Populate components table (show ALL components like in new quotation form)
+
+    // Populate components table
     const componentsTable = document.getElementById('modal-components-table');
     componentsTable.innerHTML = ''; // Clear existing content
-    
-    // Define ALL component mappings (same order as new quotation form)
+
     const components = [
       { name: 'CPU', details: record.cpu_details, unit: record.cpu_unit, note: record.cpu_upgrade_note, price: record.cpu_price },
       { name: 'CPU Cooling', details: record.cpu_cooling_details, unit: record.cpu_cooling_unit, note: record.cpu_cooling_upgrade_note, price: record.cpu_cooling_price },
@@ -345,59 +348,31 @@ async function viewRecord(recordId) {
       { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note, price: record.monitor_price },
       { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price }
     ];
-    
-    // Show ALL components (not just active ones) - same as new quotation form
-    components.forEach(component => {
-      const row = document.createElement('tr');
-      
-      // Part name
-      const partCell = document.createElement('td');
-      partCell.textContent = component.name;
-      row.appendChild(partCell);
-      
-      // Details
-      const detailsCell = document.createElement('td');
-      detailsCell.textContent = component.details || '';
-      if (!component.details || component.details.trim() === '') {
-        detailsCell.classList.add('component-empty');
-        detailsCell.textContent = '-';
-      }
-      row.appendChild(detailsCell);
-      
-      // Unit
-      const unitCell = document.createElement('td');
-      unitCell.textContent = component.unit || '0';
-      unitCell.style.textAlign = 'center';
-      row.appendChild(unitCell);
-      
-      // Upgrade Note
-      const noteCell = document.createElement('td');
-      noteCell.textContent = component.note || '';
-      if (!component.note || component.note.trim() === '') {
-        noteCell.classList.add('component-empty');
-        noteCell.textContent = '-';
-      }
-      row.appendChild(noteCell);
 
-      // Price
-      const priceCell = document.createElement('td');
-      priceCell.textContent = `${component.price || '0.00'}`;
-      priceCell.style.textAlign = 'right';
-      row.appendChild(priceCell);
-      
-      componentsTable.appendChild(row);
+    let hasContent = false;
+    components.forEach(component => {
+      if (component.details || component.note) {
+        hasContent = true;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${component.name}</td>
+          <td>${component.details || '-'}</td>
+          <td style="text-align: center;">${component.unit || '0'}</td>
+          <td>${component.note || '-'}</td>
+          <td style="text-align: right;">${component.price || '0.00'}</td>
+        `;
+        componentsTable.appendChild(row);
+      }
     });
-    
+
+    if (!hasContent) {
+      componentsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">No component details available.</td></tr>';
+    }
+
   } catch (error) {
     console.error('Error fetching record details:', error);
-    
-    // Show error in modal
-    document.getElementById('modal-id').textContent = 'Error';
-    document.getElementById('modal-platform').textContent = 'Failed to load';
-    document.getElementById('modal-customer').textContent = 'Failed to load';
-    document.getElementById('modal-date').textContent = 'Failed to load';
-    document.getElementById('modal-price').textContent = 'Failed to load';
-    document.getElementById('modal-components-table').innerHTML = `
+    const componentsTable = document.getElementById('modal-components-table');
+    componentsTable.innerHTML = `
       <tr>
         <td colspan="4" style="text-align: center; color: #dc3545; font-weight: bold;">
           <i class="fas fa-exclamation-triangle"></i> 
@@ -410,12 +385,25 @@ async function viewRecord(recordId) {
         </td>
       </tr>
     `;
+  } finally {
+    modalContent.classList.remove('loading');
   }
 }
 
 // Function to close the view modal
 function closeViewModal() {
   document.getElementById('viewModal').style.display = 'none';
+}
+
+// Function to print the modal content
+function printModal() {
+  const modalContent = document.getElementById('viewModal').innerHTML;
+  const originalContent = document.body.innerHTML;
+  
+  document.body.innerHTML = modalContent;
+  window.print();
+  document.body.innerHTML = originalContent;
+  window.location.reload(); // Reload to restore original state
 }
 
 // Function to edit a record
