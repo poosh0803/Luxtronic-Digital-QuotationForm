@@ -17,6 +17,7 @@ function getTableData() {
   
   components.forEach(component => {
     formData.append(`${component}_details`, '');
+    formData.append(`${component}_price`, '');
     formData.append(`${component}_unit`, '');
     formData.append(`${component}_upgrade_note`, '');
   });
@@ -49,12 +50,14 @@ function getTableData() {
     
     if (mappedComponent) {
       const details = cells[1].querySelector('input')?.value || '';
-      const unit = cells[2].querySelector('select')?.value || '';
-      const upgradeNote = cells[3].querySelector('input')?.value || '';
+      const price = cells[2].querySelector('input')?.value || '';
+      const unit = cells[3].querySelector('select')?.value || '';
+      const upgradeNote = cells[4].querySelector('input')?.value || '';
         
-      console.log(`Setting ${mappedComponent}: details="${details}", unit="${unit}", upgradeNote="${upgradeNote}"`);
+      console.log(`Setting ${mappedComponent}: details="${details}", price="${price}", unit="${unit}", upgradeNote="${upgradeNote}"`);
       
       formData.set(`${mappedComponent}_details`, details);
+      formData.set(`${mappedComponent}_price`, price);
       formData.set(`${mappedComponent}_unit`, unit);
       formData.set(`${mappedComponent}_upgrade_note`, upgradeNote);
     } else {
@@ -71,7 +74,32 @@ function debugTableData(formData) {
   }
 }
 
+function updateCalculatedPrice() {
+  const table = document.querySelector('table');
+  const rows = table.querySelectorAll('tbody tr');
+  let calculatedPrice = 0;
+
+  rows.forEach(row => {
+    const priceInput = row.querySelector('input[type="number"]');
+    const unitSelect = row.querySelector('select');
+
+    if (priceInput && unitSelect) {
+      const price = parseFloat(priceInput.value) || 0;
+      const unit = parseInt(unitSelect.value) || 0;
+      calculatedPrice += price * unit;
+    }
+  });
+
+  document.getElementById('calculated-price').value = calculatedPrice.toFixed(2);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const table = document.querySelector('table');
+  table.addEventListener('input', (event) => {
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') {
+      updateCalculatedPrice();
+    }
+  });
   const submitButton = document.querySelector('.submit-btn');
   if (!submitButton) {
     console.error('Submit button not found in the DOM');

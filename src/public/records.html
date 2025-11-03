@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quotation Records</title>
   <link rel="stylesheet" href="css/index.css">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="css/darkmode.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/printForm.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 </head>
 <body>
   <!-- Header -->
@@ -66,6 +66,7 @@
             <th>Platform</th>
             <th>Customer Name</th>
             <th>Date</th>
+            <th>Calculated Price</th>
             <th>Final Price</th>
             <th>Actions</th>
           </tr>
@@ -82,6 +83,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2><i class="fas fa-eye"></i> View Quotation Record</h2>
+        <button class="btn-print" onclick="printModal()"><i class="fas fa-print"></i> Print</button>
         <span class="close" onclick="closeViewModal()">&times;</span>
       </div>
       <div class="modal-body">
@@ -108,7 +110,11 @@
             </div>
           </div>
           <div class="info-row">
-            <div class="info-item full-width">
+            <div class="info-item">
+              <label>Calculated Price:</label>
+              <span id="modal-calculated-price" class="price-display">Loading...</span>
+            </div>
+            <div class="info-item">
               <label>Final Price:</label>
               <span id="modal-price" class="price-display">Loading...</span>
             </div>
@@ -125,6 +131,7 @@
                 <th>Details</th>
                 <th>Unit</th>
                 <th>Upgrade Note</th>
+                <th>Price</th>
               </tr>
             </thead>
             <tbody id="modal-components-table">
@@ -170,7 +177,11 @@
             </div>
           </div>
           <div class="info-row">
-            <div class="info-item full-width">
+            <div class="info-item">
+              <label>Calculated Price (AUD):</label>
+              <span id="edit-modal-calculated-price" class="price-display">0.00</span>
+            </div>
+            <div class="info-item">
               <label>Final Price (AUD):</label>
               <input type="number" id="edit-modal-price" class="form-input price-input" step="0.01" min="0" placeholder="0.00">
             </div>
@@ -187,6 +198,7 @@
                 <th>Details</th>
                 <th>Unit</th>
                 <th>Upgrade Note</th>
+                <th>Price</th>
               </tr>
             </thead>
             <tbody id="edit-modal-components-table">

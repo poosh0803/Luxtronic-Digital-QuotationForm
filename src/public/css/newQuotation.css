@@ -1,0 +1,126 @@
+.form-container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.price-section {
+  max-width: 1500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.price-input-container {
+  width: 100%;
+}
+
+.new-quotation-page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.new-quotation-page thead {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+}
+
+.new-quotation-page th, .new-quotation-page td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.new-quotation-page tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.new-quotation-page tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.new-quotation-page input[type="text"],
+.new-quotation-page input[type="number"],
+.new-quotation-page select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.new-quotation-page input[type="text"]:focus,
+.new-quotation-page input[type="number"]:focus,
+.new-quotation-page select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.new-quotation-page td:nth-child(3),
+.new-quotation-page th:nth-child(3),
+.new-quotation-page td:nth-child(4),
+.new-quotation-page th:nth-child(4) {
+  text-align: center;
+}
+
+.new-quotation-page .price-section {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.new-quotation-page .price-input-container {
+  margin-bottom: 15px;
+}
+
+.new-quotation-page .price-input-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.new-quotation-page .price-input-container input {
+  width: calc(100% - 50px);
+  display: inline-block;
+}
+
+.new-quotation-page .currency {
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+  line-height: 38px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+.new-quotation-page .submit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.new-quotation-page .submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.new-quotation-page th:nth-child(1), .new-quotation-page td:nth-child(1) { width: 10% !important; }
+.new-quotation-page th:nth-child(2), .new-quotation-page td:nth-child(2) { width: 43% !important; }
+.new-quotation-page th:nth-child(3), .new-quotation-page td:nth-child(3) { width: 10% !important; }
+.new-quotation-page th:nth-child(4), .new-quotation-page td:nth-child(4) { width: 7% !important; }
+.new-quotation-page th:nth-child(5), .new-quotation-page td:nth-child(5) { width: 30% !important; }
+
+.new-quotation-page input[type="text"],
+.new-quotation-page input[type="number"] {
+  width: 95%;
+}
