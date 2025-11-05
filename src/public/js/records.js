@@ -397,13 +397,7 @@ function closeViewModal() {
 
 // Function to print the modal content
 function printModal() {
-  const modalContent = document.getElementById('viewModal').innerHTML;
-  const originalContent = document.body.innerHTML;
-  
-  document.body.innerHTML = modalContent;
   window.print();
-  document.body.innerHTML = originalContent;
-  window.location.reload(); // Reload to restore original state
 }
 
 // Function to edit a record
