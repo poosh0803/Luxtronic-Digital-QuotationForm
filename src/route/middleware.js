@@ -95,7 +95,6 @@ router.post('/quotation', (req, res, next) => {
   console.log('Content-Type:', req.get('Content-Type'));
   const {
     customer_name,
-    price,
     final_price,
     platform,
     created_at,
@@ -164,7 +163,7 @@ router.post('/quotation', (req, res, next) => {
   try {
     const result = await pool.query(
       `INSERT INTO quotations (
-        customer_name, price, final_price, platform, cpu_details, cpu_unit, cpu_price, cpu_upgrade_note,
+        customer_name, final_price, platform, cpu_details, cpu_unit, cpu_price, cpu_upgrade_note,
         cpu_cooling_details, cpu_cooling_unit, cpu_cooling_price, cpu_cooling_upgrade_note, motherboard_details,
         motherboard_unit, motherboard_price, motherboard_upgrade_note, ram_details, ram_unit, ram_price, ram_upgrade_note,
         storage1_details, storage1_unit, storage1_price, storage1_upgrade_note, storage2_details, storage2_unit,
@@ -175,10 +174,10 @@ router.post('/quotation', (req, res, next) => {
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
         $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
-        $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57
+        $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56
       ) RETURNING *`,
       [
-        customer_name, parseFloatOrNull(price), parseFloatOrNull(final_price), platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
+        customer_name, parseFloatOrNull(final_price), platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
         cpu_cooling_details, parseIntOrNull(cpu_cooling_unit), parseFloatOrNull(cpu_cooling_price), cpu_cooling_upgrade_note, motherboard_details,
         parseIntOrNull(motherboard_unit), parseFloatOrNull(motherboard_price), motherboard_upgrade_note, ram_details, parseIntOrNull(ram_unit), parseFloatOrNull(ram_price), ram_upgrade_note,
         storage1_details, parseIntOrNull(storage1_unit), parseFloatOrNull(storage1_price), storage1_upgrade_note, storage2_details, parseIntOrNull(storage2_unit),
@@ -281,23 +280,23 @@ router.put('/quotation/:id', (req, res, next) => {
   try {
     const result = await pool.query(
       `UPDATE quotations SET
-        customer_name = $1, price = $2, final_price = $3, platform = $4, cpu_details = $5, cpu_unit = $6, cpu_price = $7, cpu_upgrade_note = $8,
-        cpu_cooling_details = $9, cpu_cooling_unit = $10, cpu_cooling_price = $11, cpu_cooling_upgrade_note = $12,
-        motherboard_details = $13, motherboard_unit = $14, motherboard_price = $15, motherboard_upgrade_note = $16,
-        ram_details = $17, ram_unit = $18, ram_price = $19, ram_upgrade_note = $20,
-        storage1_details = $21, storage1_unit = $22, storage1_price = $23, storage1_upgrade_note = $24,
-        storage2_details = $25, storage2_unit = $26, storage2_price = $27, storage2_upgrade_note = $28,
-        gpu_details = $29, gpu_unit = $30, gpu_price = $31, gpu_upgrade_note = $32,
-        case_details = $33, case_unit = $34, case_price = $35, case_upgrade_note = $36,
-        psu_details = $37, psu_unit = $38, psu_price = $39, psu_upgrade_note = $40,
-        sys_fan_details = $41, sys_fan_unit = $42, sys_fan_price = $43, sys_fan_upgrade_note = $44,
-        os_details = $45, os_unit = $46, os_price = $47, os_upgrade_note = $48,
-        monitor_details = $49, monitor_unit = $50, monitor_price = $51, monitor_upgrade_note = $52,
-        others_details = $53, others_unit = $54, others_price = $55, others_upgrade_note = $56,
-        created_at = $57
-      WHERE id = $58 RETURNING *`,
+        customer_name = $1, final_price = $2, platform = $3, cpu_details = $4, cpu_unit = $5, cpu_price = $6, cpu_upgrade_note = $7,
+        cpu_cooling_details = $8, cpu_cooling_unit = $9, cpu_cooling_price = $10, cpu_cooling_upgrade_note = $11,
+        motherboard_details = $12, motherboard_unit = $13, motherboard_price = $14, motherboard_upgrade_note = $15,
+        ram_details = $16, ram_unit = $17, ram_price = $18, ram_upgrade_note = $19,
+        storage1_details = $20, storage1_unit = $21, storage1_price = $22, storage1_upgrade_note = $23,
+        storage2_details = $24, storage2_unit = $25, storage2_price = $26, storage2_upgrade_note = $27,
+        gpu_details = $28, gpu_unit = $29, gpu_price = $30, gpu_upgrade_note = $31,
+        case_details = $32, case_unit = $33, case_price = $34, case_upgrade_note = $35,
+        psu_details = $36, psu_unit = $37, psu_price = $38, psu_upgrade_note = $39,
+        sys_fan_details = $40, sys_fan_unit = $41, sys_fan_price = $42, sys_fan_upgrade_note = $43,
+        os_details = $44, os_unit = $45, os_price = $46, os_upgrade_note = $47,
+        monitor_details = $48, monitor_unit = $49, monitor_price = $50, monitor_upgrade_note = $51,
+        others_details = $52, others_unit = $53, others_price = $54, others_upgrade_note = $55,
+        created_at = $56
+      WHERE id = $57 RETURNING *`,
       [
-        customer_name, price, final_price, platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
+        customer_name, final_price, platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
         cpu_cooling_details, parseIntOrNull(cpu_cooling_unit), parseFloatOrNull(cpu_cooling_price), cpu_cooling_upgrade_note,
         motherboard_details, parseIntOrNull(motherboard_unit), parseFloatOrNull(motherboard_price), motherboard_upgrade_note,
         ram_details, parseIntOrNull(ram_unit), parseFloatOrNull(ram_price), ram_upgrade_note,
@@ -339,8 +338,8 @@ router.get('/records', async (req, res) => {
       port: process.env.DB_PORT
     });
     
-    console.log('Executing query: SELECT id, platform, customer_name, created_at, price, final_price FROM quotations ORDER BY created_at DESC');
-    const result = await pool.query('SELECT id, platform, customer_name, created_at, price, final_price FROM quotations ORDER BY created_at DESC');
+    console.log('Executing query: SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
+    const result = await pool.query('SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
     
     console.log('Query executed successfully');
     console.log('Records found:', result.rows.length);
