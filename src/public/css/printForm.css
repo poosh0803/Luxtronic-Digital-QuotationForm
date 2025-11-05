@@ -1,70 +1,206 @@
 /* Print-specific styles */
 @media print {
-  body {
-    background-color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Hide elements we don't want to print */
+  .nav-bar,
+  .dark-mode-toggle,
+  .print-btn,
+  .quotation-selector,
+  #quotation-select,
+  .loading,
+  .no-quotation,
+  .no-print {
+    display: none !important;
   }
 
-  /* Hide everything except the modal content */
+  /* Reset visibility and remove all borders */
   body * {
-    visibility: hidden;
+    visibility: visible !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
-  #viewModal, #viewModal * {
-    visibility: visible;
+  /* General print styles */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    font-family: Arial, sans-serif !important;
+    min-width: 0 !important;
+    border: none !important;
   }
 
-  #viewModal {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    box-shadow: none;
-    border: none;
+  /* Layout styles matching index page */
+  #latest-quotation {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  /* Remove all borders and outlines */
+  .modal {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
   }
 
   .modal-content {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+  }
+
+  /* Quotation header styles */
+  .quotation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px !important;
+    padding: 10px !important;
+    background: #fff;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .customer-info h3 {
     margin: 0;
-    border-radius: 0;
-    box-shadow: none;
-    border: 1px solid #ccc;
-  }
-
-  .modal-header {
-    background-color: #f0f0f0 !important;
     color: #333 !important;
-    border-bottom: 2px solid #ccc;
-    padding: 15px;
+    font-size: 20px !important;
   }
 
-  .modal-header h2 {
-    font-size: 1.5em;
+  .quotation-date {
+    margin-top: 4px !important;
+    color: #666 !important;
+    font-size: 12px !important;
   }
 
-  .close, .btn-print {
-    display: none; /* Hide close and print buttons */
+  .platform-badge {
+    display: inline-block;
+    padding: 2px 6px !important;
+    border-radius: 3px;
+    font-size: 11px !important;
+    text-transform: uppercase;
   }
 
-  .modal-body {
-    padding: 20px;
+  .platform-badge.centrecom {
+    background-color: #e3f2fd !important;
+    color: #1976d2 !important;
   }
 
-  .info-item label {
+  /* Components grid layout */
+  .components-section {
+    background: #fff;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .components-section h4 {
+    color: #333 !important;
+    margin: 0 0 10px 0 !important;
+    font-size: 16px !important;
+  }
+
+  .components-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px !important;
+    page-break-inside: avoid;
+    padding: 0 5mm !important;  /* Add slight padding to align with printer margins */
+  }
+
+  .component-item {
+    background: #fff;
+    border: 1px solid #dd7900 !important;
+    padding: 12px !important;
+    break-inside: avoid;
+    margin: 0 !important;
+  }
+
+  .component-title {
     font-weight: bold;
-    color: #333;
+    margin-bottom: 4px !important;
+    color: #333 !important;
+    font-size: 13px !important;
   }
 
-  .price-display {
-    color: #d4a44c !important;
+  .component-details {
+    color: #666 !important;
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+    line-height: 1.3 !important;
+  }
+
+  .component-unit {
+    color: #888 !important;
+    font-size: 11px !important;
+  }
+
+  .component-note {
+    margin-top: 4px !important;
+    font-size: 11px !important;
+    color: #666 !important;
+    font-style: italic;
+  }
+
+  .empty-details {
+    color: #999 !important;
+    font-style: italic;
+  }
+
+  /* Price styles */
+  .price-info {
+    text-align: right;
+  }
+
+  .final-price {
+    font-size: 24px !important;
     font-weight: bold;
+    color: #333 !important;
+    margin-bottom: 5px !important;
   }
 
-  .modal-table th, .modal-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
+  /* Force color printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  .modal-table th {
-    background-color: #f8f8f8;
+  /* Minimal page margins */
+  @page {
+    margin: 5mm !important;
+    size: A4;
+  }
+
+  /* Optimize page breaks */
+  .component-item {
+    page-break-inside: avoid;
+  }
+
+  .quotation-header {
+    page-break-after: avoid;
+  }
+
+  .components-section h4 {
+    page-break-after: avoid;
+  }
+
+  /* Remove any fixed heights */
+  * {
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  /* Ensure borders print clearly */
+  * {
+    border-width: 1px !important;
   }
 }

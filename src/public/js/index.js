@@ -301,59 +301,5 @@ async function loadQuotationById(id) {
 
 // Print functionality
 function printQuotation() {
-    const quotationSelector = document.querySelector('.quotation-header-controls');
-    // Hide quotation selector during print
-    if (quotationSelector) {
-        quotationSelector.classList.add('no-print');
-    }
-    
-    // Add print header
-    const printHeader = document.createElement('div');
-    printHeader.className = 'print-only';
-    printHeader.innerHTML = `
-        <div class="form-header">
-            <h1 style="color: #d4a44c;">LUXTRONIC - Digital Quotation Form</h1>
-        </div>
-    `;
-    
-    // Insert the print header at the beginning of main content
-    const main = document.querySelector('main');
-    main.insertBefore(printHeader, main.firstChild);
-    
-    // Add a page break class to ensure proper printing
-    const quotationCard = document.querySelector('.quotation-card');
-    if (quotationCard) {
-        quotationCard.style.pageBreakInside = 'avoid';
-    }
-    
-    // // Add notes section at the bottom
-    // const notesSection = document.createElement('div');
-    // notesSection.className = 'print-only notes-section';
-    // notesSection.innerHTML = `
-    //     <div style="margin-top: 15px; padding: 8px; border: 2px solid #d4a44c; border-radius: 6px; background-color: #fefefe;">
-    //         <div style="font-weight: bold; color: #d4a44c; margin-bottom: 5px; font-size: 10px;">
-    //             <i class="fas fa-sticky-note" style="margin-right: 4px;"></i>Notes:
-    //         </div>
-    //         <div style="min-height: 100px; border: 1px dashed #ccc; padding: 6px; background-color: #fcfcfc; border-radius: 3px;">
-    //             <div style="color: #999; font-size: 8px; font-style: italic;"></div>
-    //         </div>
-    //     </div>
-    // `;
-    
-    // // Insert notes section after the quotation content
-    // const mainElement = document.querySelector('main');
-    // mainElement.appendChild(notesSection);
-    
-    // Trigger print dialog
     window.print();
-    
-    // Remove the print header and restore quotation selector after printing
-    setTimeout(() => {
-        if (printHeader.parentNode) {
-            printHeader.parentNode.removeChild(printHeader);
-        }
-        if (quotationSelector) {
-            quotationSelector.classList.remove('no-print');
-        }
-    }, 1000);
 }
