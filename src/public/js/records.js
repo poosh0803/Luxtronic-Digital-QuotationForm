@@ -272,6 +272,9 @@ function renderRecords(records) {
         <button class="btn-delete" onclick="deleteRecord(${record.id})" title="Delete Record">
           <i class="fas fa-trash"></i>
         </button>
+        <button class="btn-duplicate" onclick="duplicateRecord(${record.id})" title="Duplicate Record">
+          <i class="fas fa-copy"></i>
+        </button>
       </td>
     `;
     recordsTableBody.appendChild(row);
@@ -669,6 +672,10 @@ async function deleteRecord(recordId) {
     console.error('Error deleting record:', error);
     alert(`Error deleting record: ${error.message}`);
   }
+}
+
+function duplicateRecord(recordId) {
+  
 }
 
 // Close modal when clicking outside of it
