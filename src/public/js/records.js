@@ -674,8 +674,46 @@ async function deleteRecord(recordId) {
   }
 }
 
-function duplicateRecord(recordId) {
-  
+async function duplicateRecord(recordId) {
+  const confirmDuplicate = confirm(`Are you sure you want to duplicate record #${recordId}?`);
+
+  if (!confirmDuplicate) {
+    return;
+  }
+
+  try {
+    const recordToDuplicate = allRecords.find(record => record.id === recordId);
+
+    if (!recordToDuplicate) {
+      alert('Error: Record not found for duplication.');
+      return;
+    }
+
+    // Create a new record object, omitting the id
+    const newRecord = { ...recordToDuplicate };
+    delete newRecord.id;
+    newRecord.created_at = new Date().toISOString();
+
+
+    const response = await fetch('/api/quotation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newRecord),
+    });
+
+    if (response.ok) {
+      alert(`Record #${recordId} has been successfully duplicated.`);
+      window.location.reload();
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.details || `HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error duplicating record:', error);
+    alert(`An error occurred while duplicating the record: ${error.message}`);
+  }
 }
 
 // Close modal when clicking outside of it
