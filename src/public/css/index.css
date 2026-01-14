@@ -43,7 +43,7 @@ table th:nth-child(8), table td:nth-child(8) {
 }
 
 /* Action Buttons Styling */
-.btn-view, .btn-edit, .btn-delete, .btn-display {
+.btn-view, .btn-edit, .btn-delete, .btn-display, .btn-duplicate {
   background: none;
   border: none;
   padding: 6px 8px;
@@ -87,6 +87,15 @@ table th:nth-child(8), table td:nth-child(8) {
 
 .btn-display:hover {
   background-color: #988b00;
+  color: white;
+}
+
+.btn-duplicate {
+  color: #fd7e14;
+}
+
+.btn-duplicate:hover {
+  background-color: #fd7e14;
   color: white;
 }
 
