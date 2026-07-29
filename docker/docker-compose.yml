@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: luxtronic_quotation_postgres
     environment:
       POSTGRES_USER: luxtronic_user
