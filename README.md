@@ -74,6 +74,29 @@ npm start
 
 The app is served at `http://localhost:<PORT>` (default `80`).
 
+### Running with PM2
+
+To keep the app running in the background and restart it automatically,
+use the included [`ecosystem.config.js`](ecosystem.config.js):
+
+```bash
+npm install -g pm2
+pm2 start ecosystem.config.js          # production
+pm2 start ecosystem.config.js --env development  # dev, with file watching
+```
+
+Useful commands:
+
+```bash
+pm2 status                # process status
+pm2 logs digital-quotation-form   # tail logs
+pm2 restart digital-quotation-form
+pm2 stop digital-quotation-form
+pm2 delete digital-quotation-form
+```
+
+Logs are written to `logs/out.log` and `logs/error.log`.
+
 ## Database migrations
 
 Existing databases created before certain features were added may need:
@@ -109,4 +132,5 @@ docker/
   init.sql                 Schema for a fresh database
 migration.sql              *_price columns migration (legacy DBs)
 add-favorites-table.sql    favorites table migration (legacy DBs)
+ecosystem.config.js        PM2 process config
 ```
