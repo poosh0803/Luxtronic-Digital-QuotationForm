@@ -3,11 +3,11 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
-    container_name: luxtronic_postgres
+    container_name: luxtronic_quotation_postgres
     environment:
       POSTGRES_USER: luxtronic_user
       POSTGRES_PASSWORD: luxtronic_password
-      POSTGRES_DB: luxtronic_db
+      POSTGRES_DB: luxtronic_quotation_db
     ports:
       - "5432:5432"
     volumes:
