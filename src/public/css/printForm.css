@@ -144,6 +144,14 @@
     font-size: 11px !important;
   }
 
+  .show-prices .component-price {
+    display: inline-block !important;
+    color: #8a6d1f !important;
+    font-weight: bold;
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
   .component-note {
     margin-top: 4px !important;
     font-size: 11px !important;

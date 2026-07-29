@@ -702,6 +702,31 @@ table th:nth-child(7), table td:nth-child(7) {
   transform: translateY(-1px);
 }
 
+.price-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-price-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-price-btn:hover {
+  background-color: #565e64;
+  transform: translateY(-1px);
+}
+
 /* Latest Quotation Styles */
 .main-content {
   max-width: 1200px;
@@ -876,6 +901,22 @@ table th:nth-child(7), table td:nth-child(7) {
   border: 1px solid #bbdefb;
 }
 
+.component-price {
+  display: none;
+  color: #8a6d1f;
+  font-size: 0.95em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: #fff8ec;
+  border-radius: 15px;
+  border: 1px solid #f0dfb8;
+}
+
+.show-prices .component-price {
+  display: inline-block;
+}
+
 .component-note {
   font-style: italic;
   color: #6c757d;
@@ -1013,6 +1054,12 @@ table th:nth-child(7), table td:nth-child(7) {
   background: #744210;
   color: #faf089;
   border-left-color: #d69e2e;
+}
+
+.dark-mode .component-price {
+  background: #5c4a1a;
+  color: #f7d774;
+  border-color: #8a6d1f;
 }
 
 .dark-mode .component-empty {

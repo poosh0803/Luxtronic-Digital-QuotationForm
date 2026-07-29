@@ -1,3 +1,5 @@
+let showPartPrices = false;
+
 // Dark mode functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize dark mode
@@ -121,12 +123,17 @@ function displayQuotation(quotation) {
         const details = quotation[`${component.key}_details`];
         const unit = quotation[`${component.key}_unit`];
         const note = quotation[`${component.key}_upgrade_note`];
-        
+        const price = quotation[`${component.key}_price`];
+
         // Show all components, even if they don't have details
         const hasDetails = details && details.trim();
         const displayDetails = hasDetails ? details : 'No details specified';
         const itemClass = hasDetails ? 'component-item' : 'component-item component-empty';
-        
+        const hasPrice = price !== null && price !== undefined && price !== '' && parseInt(unit, 10) > 0;
+        const priceHtml = hasPrice
+            ? `<div class="component-price">Price: $${parseFloat(price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>`
+            : '';
+
         componentsHtml += `
             <div class="${itemClass}">
                 <div class="component-title">
@@ -134,6 +141,7 @@ function displayQuotation(quotation) {
                 </div>
                 <div class="component-details ${!hasDetails ? 'empty-details' : ''}">${displayDetails}</div>
                 <div class="component-unit">Quantity: ${unit || 0}</div>
+                ${priceHtml}
                 ${note && note.trim() ? `<div class="component-note">Note: ${note}</div>` : ''}
             </div>
         `;
@@ -152,13 +160,19 @@ function displayQuotation(quotation) {
             </div>
             <div class="price-info">
                 <div class="final-price">$${parseFloat(quotation.final_price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
-                <button type="button" class="print-btn no-print" onclick="printQuotation()">
-                    <i class="fas fa-print"></i>
-                    Print Quotation
-                </button>
+                <div class="price-buttons no-print">
+                    <button type="button" id="toggle-price-btn" class="toggle-price-btn" onclick="togglePartPrices()">
+                        <i class="fas fa-${showPartPrices ? 'eye-slash' : 'eye'}"></i>
+                        ${showPartPrices ? 'Hide' : 'Show'} Part Prices
+                    </button>
+                    <button type="button" class="print-btn" onclick="printQuotation()">
+                        <i class="fas fa-print"></i>
+                        Print Quotation
+                    </button>
+                </div>
             </div>
         </div>
-        
+
         <div class="components-section">
             <h4 style="margin-bottom: 15px; color: #333;">
                 <i class="fas fa-cogs"></i> Components & Specifications
@@ -168,6 +182,26 @@ function displayQuotation(quotation) {
             </div>
         </div>
     `;
+
+    container.classList.toggle('show-prices', showPartPrices);
+}
+
+// Toggle individual part price visibility (also reflected when printing)
+function togglePartPrices() {
+    showPartPrices = !showPartPrices;
+
+    const container = document.getElementById('latest-quotation');
+    if (container) {
+        container.classList.toggle('show-prices', showPartPrices);
+    }
+
+    const btn = document.getElementById('toggle-price-btn');
+    if (btn) {
+        btn.innerHTML = `
+            <i class="fas fa-${showPartPrices ? 'eye-slash' : 'eye'}"></i>
+            ${showPartPrices ? 'Hide' : 'Show'} Part Prices
+        `;
+    }
 }
 
 async function loadQuotationHistory() {
