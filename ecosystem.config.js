@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "digital-quotation-form",
+      name: "luxtronic-quotation-form",
       script: "src/app.js",
       cwd: __dirname,
       instances: 1,
