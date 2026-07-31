@@ -131,7 +131,7 @@ function displayQuotation(quotation) {
         const itemClass = hasDetails ? 'component-item' : 'component-item component-empty';
         const hasPrice = price !== null && price !== undefined && price !== '' && parseInt(unit, 10) > 0;
         const priceHtml = hasPrice
-            ? `<div class="component-price">Price: $${parseFloat(price).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>`
+            ? `<div class="component-price">Price: $${parseFloat(price).toLocaleString('en-US', {minimumFractionDigits: 2})}${parseInt(unit, 10) > 1 ? ' each' : ''}</div>`
             : '';
 
         componentsHtml += `
