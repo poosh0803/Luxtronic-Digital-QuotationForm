@@ -1,8 +1,9 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
 const multer = require('multer');
+const { parseIntOrNull, parseFloatOrNull } = require('../utils/parse');
 
 // Configure multer for form data
 const upload = multer();
@@ -55,33 +56,6 @@ router.get('/quotations', async (req, res) => {
   }
 });
 
-function debugTableData(data) {
-  console.log('=== DEBUG TABLE DATA ===');
-  console.log('Data type:', typeof data);
-  console.log('Data is null/undefined:', data == null);
-  
-  if (data && typeof data === 'object') {
-    console.log('Object keys:', Object.keys(data));
-    console.log('Object entries count:', Object.keys(data).length);
-    
-    // Check if it's a FormData object
-    if (data.entries && typeof data.entries === 'function') {
-      console.log('Processing as FormData:');
-      for (let [key, value] of data.entries()) {
-        console.log(`  ${key}: "${value}"`);
-      }
-    } else {
-      // It's a regular object
-      console.log('Processing as regular object:');
-      for (let [key, value] of Object.entries(data)) {
-        console.log(`  ${key}: "${value}"`);
-      }
-    }
-  } else {
-    console.log('Data is not an object:', data);
-  }
-  console.log('=== END DEBUG ===');
-}
 // Create a new quotation
 router.post('/quotation', (req, res, next) => {
   // Check content type and apply appropriate middleware
@@ -91,8 +65,6 @@ router.post('/quotation', (req, res, next) => {
     next();
   }
 }, async (req, res) => {
-  // Debug after middleware has processed the data
-  console.log('Content-Type:', req.get('Content-Type'));
   const {
     customer_name,
     final_price,
@@ -151,14 +123,6 @@ router.post('/quotation', (req, res, next) => {
     others_price,
     others_upgrade_note
   } = req.body;
-
-  // Helper function to convert empty strings to null for integer fields
-  const parseIntOrNull = (value) => {
-    return (value === '' || value === null || value === undefined) ? null : parseInt(value, 10);
-  };
-  const parseFloatOrNull = (value) => {
-    return (value === '' || value === null || value === undefined) ? null : parseFloat(value);
-  };
 
   try {
     const result = await pool.query(
@@ -187,14 +151,9 @@ router.post('/quotation', (req, res, next) => {
         parseFloatOrNull(monitor_price), monitor_upgrade_note, others_details, parseIntOrNull(others_unit), parseFloatOrNull(others_price), others_upgrade_note, created_at
       ]
     );
-    console.log('Quotation created successfully:', result.rows[0]);
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Database error details:');
-    console.error('Error message:', err.message);
-    console.error('Error code:', err.code);
-    console.error('Error detail:', err.detail);
-    console.error('Full error:', err);
+    console.error('Error creating quotation:', err.message);
     res.status(500).json({ error: 'Database error', details: err.message });
   }
 });
@@ -211,7 +170,6 @@ router.put('/quotation/:id', (req, res, next) => {
   const { id } = req.params;
   const {
     customer_name,
-    price,
     final_price,
     platform,
     created_at,
@@ -268,14 +226,6 @@ router.put('/quotation/:id', (req, res, next) => {
     others_price,
     others_upgrade_note
   } = req.body;
-
-  // Helper function to convert empty strings to null for integer fields
-  const parseIntOrNull = (value) => {
-    return (value === '' || value === null || value === undefined) ? null : parseInt(value, 10);
-  };
-  const parseFloatOrNull = (value) => {
-    return (value === '' || value === null || value === undefined) ? null : parseFloat(value);
-  };
 
   try {
     const result = await pool.query(
@@ -324,35 +274,11 @@ router.put('/quotation/:id', (req, res, next) => {
 
 // New endpoint to fetch all records with limited fields
 router.get('/records', async (req, res) => {
-  console.log('=== API /api/records called ===');
-  console.log('Request method:', req.method);
-  console.log('Request URL:', req.url);
-  console.log('Request headers:', req.headers);
-  
   try {
-    console.log('Attempting to connect to database...');
-    console.log('Database config:', {
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      database: process.env.DB_NAME,
-      port: process.env.DB_PORT
-    });
-    
-    console.log('Executing query: SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
     const result = await pool.query('SELECT id, platform, customer_name, created_at, final_price FROM quotations ORDER BY created_at DESC');
-    
-    console.log('Query executed successfully');
-    console.log('Records found:', result.rows.length);
-    console.log('Sample record (first):', result.rows[0]);
-    console.log('All records:', result.rows);
-    
     res.json(result.rows);
   } catch (err) {
-    console.error('=== DATABASE ERROR ===');
-    console.error('Error message:', err.message);
-    console.error('Error code:', err.code);
-    console.error('Error stack:', err.stack);
-    console.error('Full error object:', err);
+    console.error('Error fetching records:', err.message);
     res.status(500).json({ error: 'Database error', details: err.message });
   }
 });
@@ -360,33 +286,25 @@ router.get('/records', async (req, res) => {
 // Delete a quotation by ID
 router.delete('/quotation/:id', async (req, res) => {
   const { id } = req.params;
-  
-  console.log('=== DELETE QUOTATION REQUEST ===');
-  console.log('Quotation ID to delete:', id);
-  
+
   try {
     // First check if the quotation exists
     const checkResult = await pool.query('SELECT id FROM quotations WHERE id = $1', [id]);
-    
+
     if (checkResult.rows.length === 0) {
-      console.log('Quotation not found for ID:', id);
       return res.status(404).json({ error: 'Quotation not found' });
     }
-    
+
     // Delete the quotation
     const deleteResult = await pool.query('DELETE FROM quotations WHERE id = $1 RETURNING id', [id]);
-    
-    console.log('Quotation deleted successfully:', deleteResult.rows[0]);
-    res.json({ 
-      message: 'Quotation deleted successfully', 
-      deletedId: deleteResult.rows[0].id 
+
+    res.json({
+      message: 'Quotation deleted successfully',
+      deletedId: deleteResult.rows[0].id
     });
-    
+
   } catch (err) {
-    console.error('=== DELETE ERROR ===');
-    console.error('Error message:', err.message);
-    console.error('Error code:', err.code);
-    console.error('Error stack:', err.stack);
+    console.error('Error deleting quotation:', err.message);
     res.status(500).json({ error: 'Database error', details: err.message });
   }
 });
@@ -396,10 +314,8 @@ router.delete('/quotation/:id', async (req, res) => {
 // Get all favorite quotation IDs
 router.get('/favorites', async (req, res) => {
   try {
-    console.log('=== GET FAVORITES ===');
     const result = await pool.query('SELECT quotation_id FROM favorites ORDER BY created_at DESC');
     const favoriteIds = result.rows.map(row => row.quotation_id);
-    console.log('Retrieved favorite IDs:', favoriteIds);
     res.json(favoriteIds);
   } catch (err) {
     console.error('Error getting favorites:', err.message);
@@ -411,29 +327,24 @@ router.get('/favorites', async (req, res) => {
 router.post('/favorites/:quotationId', async (req, res) => {
   const { quotationId } = req.params;
   try {
-    console.log('=== ADD TO FAVORITES ===');
-    console.log('Adding quotation ID to favorites:', quotationId);
-    
     // Check if quotation exists
     const quotationCheck = await pool.query('SELECT id FROM quotations WHERE id = $1', [quotationId]);
     if (quotationCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Quotation not found' });
     }
-    
+
     // Add to favorites (will fail silently if already exists due to UNIQUE constraint)
     const result = await pool.query(
       'INSERT INTO favorites (quotation_id) VALUES ($1) ON CONFLICT (quotation_id) DO NOTHING RETURNING *',
       [quotationId]
     );
-    
+
     if (result.rows.length > 0) {
-      console.log('Added to favorites:', result.rows[0]);
       res.status(201).json({ message: 'Added to favorites', favorite: result.rows[0] });
     } else {
-      console.log('Already in favorites:', quotationId);
       res.json({ message: 'Already in favorites' });
     }
-    
+
   } catch (err) {
     console.error('Error adding to favorites:', err.message);
     res.status(500).json({ error: 'Database error', details: err.message });
@@ -444,22 +355,17 @@ router.post('/favorites/:quotationId', async (req, res) => {
 router.delete('/favorites/:quotationId', async (req, res) => {
   const { quotationId } = req.params;
   try {
-    console.log('=== REMOVE FROM FAVORITES ===');
-    console.log('Removing quotation ID from favorites:', quotationId);
-    
     const result = await pool.query(
       'DELETE FROM favorites WHERE quotation_id = $1 RETURNING *',
       [quotationId]
     );
-    
+
     if (result.rows.length > 0) {
-      console.log('Removed from favorites:', result.rows[0]);
       res.json({ message: 'Removed from favorites', removed: result.rows[0] });
     } else {
-      console.log('Not found in favorites:', quotationId);
       res.status(404).json({ error: 'Not found in favorites' });
     }
-    
+
   } catch (err) {
     console.error('Error removing from favorites:', err.message);
     res.status(500).json({ error: 'Database error', details: err.message });

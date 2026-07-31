@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -117,22 +117,10 @@ app.get('/api/staticice-proxy-multipage', async (req, res) => {
   }
 });
 
-app.post('/submit-quotation', (req, res) => {
-  const { customerName, components } = req.body;
-  // Logic to calculate quotation based on components
-  const quotation = calculateQuotation(components);
-  res.json({ customerName, quotation });
-});
-
-function calculateQuotation(components) {
-  // Example logic for calculating quotation
-  let total = 0;
-  components.forEach(component => {
-    total += parseFloat(component.price);
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
   });
-  return total;
 }
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports = app;
