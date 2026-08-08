@@ -24,7 +24,7 @@ cd docker && docker compose up -d        # starts luxtronic_postgres, runs docke
 
 `.env` must be created from `.env.example` and its `DB_*` values must match `docker/docker-compose.yml`'s `POSTGRES_*` settings. If reusing an existing Postgres data volume, init scripts won't rerun — create the database and pipe `docker/init.sql` in manually (see README for exact commands).
 
-Two legacy one-off SQL migrations (`migration.sql`, `add-favorites-table.sql`) exist only for databases created before `*_price` columns and the `favorites` table were added to `docker/init.sql`; new setups don't need them.
+Three legacy one-off SQL migrations exist only for databases created before the corresponding change landed in `docker/init.sql`; new setups don't need them: `migration.sql` and `add-favorites-table.sql` (predate `*_price` columns and the `favorites` table), and `migrate-created-at-timestamptz.sql` (predates `created_at` switching from `TIMESTAMP` to `TIMESTAMPTZ` — see note below).
 
 PM2 is used for process management in production (`ecosystem.config.js`, process name `digital-quotation-form`); logs go to `logs/out.log` / `logs/error.log`.
 
@@ -40,6 +40,8 @@ PM2 is used for process management in production (`ecosystem.config.js`, process
 `quotations` (see `docker/init.sql`) has a fixed, denormalized set of columns per PC component — `cpu`, `cpu_cooling`, `motherboard`, `ram`, `storage1`, `storage2`, `gpu`, `case`, `psu`, `sys_fan`, `os`, `monitor`, `others` — each with four columns: `<component>_details`, `<component>_price`, `<component>_unit`, `<component>_upgrade_note`. This is not a normalized line-items table; adding a new component slot means adding four new columns plus updating every place that lists them (both `INSERT`/`UPDATE` queries in `src/route/middleware.js`, and the corresponding frontend page(s) — e.g. `newQuotation.js`'s `partMapping`/`components` list).
 
 The `favorites` table stores `quotation_id` only (no user accounts — favorites are global/shared across all clients), with `ON DELETE CASCADE` from `quotations` and a `UNIQUE(quotation_id)` constraint.
+
+`created_at` on both tables is `TIMESTAMPTZ`, always written/read as a true UTC instant (`newQuotation.js` sends `new Date().toISOString()`; `middleware.js` never rewrites it). Anywhere it's rendered for a human — `index.js`, `records.js` — the `Intl`/`toLocaleDateString` call must pass `timeZone: 'Australia/Sydney'` explicitly; don't rely on the server's or browser's local timezone, since either can differ from the business's actual location.
 
 ## Testing conventions
 
