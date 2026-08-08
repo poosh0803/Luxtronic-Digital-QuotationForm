@@ -59,7 +59,7 @@ CREATE TABLE quotations (
     assembly_unit INT,
     assembly_upgrade_note TEXT,
     platform VARCHAR(10) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table to store favorite quotations
@@ -67,7 +67,7 @@ CREATE TABLE quotations (
 CREATE TABLE favorites (
     id SERIAL PRIMARY KEY,
     quotation_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE,
     UNIQUE(quotation_id) -- Prevent duplicate favorites for the same quotation
 );

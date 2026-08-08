@@ -220,7 +220,7 @@ function renderRecords(records) {
       <td>${record.id}</td>
       <td>${record.platform}</td>
       <td>${record.customer_name}</td>
-      <td>${new Date(record.created_at).toLocaleDateString()}</td>
+      <td>${new Date(record.created_at).toLocaleDateString('en-US', { timeZone: 'Australia/Sydney' })}</td>
       <td>${calculatedPrice}</td>
       <td>${record.final_price}</td>
       <td>
@@ -289,7 +289,7 @@ async function viewRecord(recordId) {
     document.getElementById('modal-id').textContent = record.id;
     document.getElementById('modal-platform').textContent = record.platform || 'N/A';
     document.getElementById('modal-customer').textContent = record.customer_name || 'N/A';
-    document.getElementById('modal-date').textContent = new Date(record.created_at).toLocaleDateString();
+    document.getElementById('modal-date').textContent = new Date(record.created_at).toLocaleDateString('en-US', { timeZone: 'Australia/Sydney' });
     document.getElementById('modal-calculated-price').textContent = `${calculateRecordPrice(record) || '0.00'} AUD`;
     document.getElementById('modal-price').textContent = `${record.final_price || '0.00'} AUD`;
 
@@ -404,7 +404,7 @@ async function fetchRecordForEdit(recordId) {
     const platformValue = record.platform === 'AMD' || record.platform === 'INTEL' ? record.platform : 'AMD';
     document.getElementById('edit-modal-platform').value = platformValue;
     document.getElementById('edit-modal-customer').value = record.customer_name || '';
-    document.getElementById('edit-modal-date').textContent = new Date(record.created_at).toLocaleDateString();
+    document.getElementById('edit-modal-date').textContent = new Date(record.created_at).toLocaleDateString('en-US', { timeZone: 'Australia/Sydney' });
     document.getElementById('edit-modal-price').value = record.final_price || '0.00';
     
     // Populate components table with editable fields
