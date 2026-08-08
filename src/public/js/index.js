@@ -47,7 +47,8 @@ function updateDateTime() {
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
+        timeZone: 'Australia/Brisbane'
     };
     
     const dateTimeElement = document.getElementById('currentDateTime');
@@ -97,7 +98,8 @@ function displayQuotation(quotation) {
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        timeZone: 'Australia/Brisbane'
     });
     
     // Define all component types with their display names
@@ -240,7 +242,8 @@ async function loadQuotationHistory() {
             const date = new Date(quotation.created_at).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
-                year: 'numeric'
+                year: 'numeric',
+                timeZone: 'Australia/Brisbane'
             });
             
             const option = document.createElement('option');
