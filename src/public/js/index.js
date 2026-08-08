@@ -114,7 +114,8 @@ function displayQuotation(quotation) {
         { key: 'sys_fan', name: 'System Fans', icon: 'fas fa-fan' },
         { key: 'os', name: 'Operating System', icon: 'fas fa-desktop' },
         { key: 'monitor', name: 'Monitor', icon: 'fas fa-desktop' },
-        { key: 'others', name: 'Other Components', icon: 'fas fa-plus' }
+        { key: 'others', name: 'Other Components', icon: 'fas fa-plus' },
+        { key: 'assembly', name: 'Assembly', icon: 'fas fa-tools' }
     ];
     
     // Build components HTML
@@ -154,6 +155,7 @@ function displayQuotation(quotation) {
                 <div class="quotation-date">
                     <i class="fas fa-calendar"></i> ${createdDate}
                 </div>
+                <div class="quotation-validity">Quotation Valid For 2 Days</div>
                 <div style="margin-top: 8px;">
                     <span class="platform-badge ${quotation.platform.toLowerCase()}">${quotation.platform}</span>
                 </div>

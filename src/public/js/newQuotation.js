@@ -12,7 +12,7 @@ function getTableData() {
   // Initialize all component fields as empty strings
   const components = [
     'cpu', 'cpu_cooling', 'motherboard', 'ram', 'storage1', 'storage2',
-    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others'
+    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others', 'assembly'
   ];
   
   components.forEach(component => {
@@ -23,12 +23,10 @@ function getTableData() {
   });
 
   // Extract data from table rows
-  rows.forEach((row, index) => {
+  rows.forEach((row) => {
     const cells = row.querySelectorAll('td');
     const part = cells[0].textContent.trim().toLowerCase().replace(/\s+/g, '_');
-    
-    console.log(`Row ${index}: Part text = "${cells[0].textContent.trim()}", Normalized = "${part}"`);
-    
+
     // Map the table row text to our component names
     const partMapping = {
       'cpu': 'cpu',
@@ -43,7 +41,8 @@ function getTableData() {
       'system_fan': 'sys_fan',
       'os': 'os',
       'monitor': 'monitor',
-      'others': 'others'
+      'others': 'others',
+      'assembly': 'assembly'
     };
     
     const mappedComponent = partMapping[part];
@@ -53,9 +52,7 @@ function getTableData() {
       const price = cells[2].querySelector('input')?.value || '';
       const unit = cells[3].querySelector('select')?.value || '';
       const upgradeNote = cells[4].querySelector('input')?.value || '';
-        
-      console.log(`Setting ${mappedComponent}: details="${details}", price="${price}", unit="${unit}", upgradeNote="${upgradeNote}"`);
-      
+
       formData.set(`${mappedComponent}_details`, details);
       formData.set(`${mappedComponent}_price`, price);
       formData.set(`${mappedComponent}_unit`, unit);
@@ -67,13 +64,6 @@ function getTableData() {
 
   return formData;
 }
-function debugTableData(formData) {
-  console.log('Table Data (FormData):');
-  for (let [key, value] of formData.entries()) {
-    console.log(key + ':', value);
-  }
-}
-
 function updateCalculatedPrice() {
   const table = document.querySelector('table');
   const rows = table.querySelectorAll('tbody tr');
@@ -108,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   submitButton.addEventListener('click', async (event) => {
     event.preventDefault(); // Prevent form submission
-    console.log('Submit button clicked'); // This should now print in the console
 
     // Show confirmation dialog
     const userConfirmed = confirm('Are you sure you want to submit the quotation?');
@@ -118,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const tableData = getTableData();
-      debugTableData(tableData);
 
       const response = await fetch('/api/quotation', {
         method: 'POST',

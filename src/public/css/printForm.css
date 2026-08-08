@@ -79,7 +79,15 @@
   .quotation-date {
     margin-top: 4px !important;
     color: #666 !important;
-    font-size: 12px !important;
+    font-size: 16px !important;
+  }
+
+  .quotation-validity {
+    margin-top: 3px !important;
+    color: #d4a44c !important;
+    font-size: 17px !important;
+    font-style: italic !important;
+    font-weight: bold !important;
   }
 
   .platform-badge {

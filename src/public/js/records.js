@@ -1,58 +1,31 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('=== Records.js loaded ===');
-  console.log('DOM Content Loaded');
-  console.log('Current URL:', window.location.href);
-  
   const recordsTableBody = document.getElementById('records-table-body');
-  console.log('Table body element found:', !!recordsTableBody);
 
   // Initialize favorites from database
   await initializeFavorites();
 
   try {
-    console.log('=== Starting fetch request ===');
-    console.log('Fetching records from /api/quotations');
-    console.log('Fetch URL:', window.location.origin + '/api/quotations');
-    
     const response = await fetch('/api/quotations');
-    console.log('=== Fetch response received ===');
-    console.log('Response status:', response.status);
-    console.log('Response statusText:', response.statusText);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-    console.log('Response ok:', response.ok);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Response not ok. Error text:', errorText);
       throw new Error(`HTTP error! status: ${response.status}, text: ${errorText}`);
     }
-    
+
     const records = await response.json();
-    console.log('=== Records parsed ===');
-    console.log('Records type:', typeof records);
-    console.log('Records length:', records.length);
-    console.log('Records data:', records);
 
     if (records.length === 0) {
-      console.log('No records found in database');
       const row = document.createElement('tr');
       row.innerHTML = '<td colspan="8" style="text-align: center;">No records found</td>';
       recordsTableBody.appendChild(row);
       return;
     }
 
-    console.log('=== Processing records ===');
     allRecords = records; // Store all records for filtering
     renderRecords(allRecords); // Use the new render function
-    
-    console.log('=== All records processed successfully ===');
   } catch (error) {
-    console.error('=== ERROR OCCURRED ===');
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    console.error('Full error:', error);
-    
+    console.error('Error loading records:', error);
+
     const row = document.createElement('tr');
     row.innerHTML = '<td colspan="7" style="text-align: center;">Error loading records: ' + error.message + '</td>';
     recordsTableBody.appendChild(row);
@@ -67,11 +40,9 @@ let showingOnlyFavorites = false;
 // Initialize favorites from database
 async function initializeFavorites() {
   try {
-    console.log('Loading favorites from database...');
     const response = await fetch('/api/favorites');
     if (response.ok) {
       favorites = await response.json();
-      console.log('Loaded favorites from database:', favorites);
     } else {
       console.error('Failed to load favorites:', response.status);
       favorites = [];
@@ -84,7 +55,6 @@ async function initializeFavorites() {
     if (storedFavorites) {
       try {
         favorites = JSON.parse(storedFavorites);
-        console.log('Loaded favorites from localStorage fallback:', favorites);
       } catch (err) {
         console.error('Error parsing localStorage favorites:', err);
         favorites = [];
@@ -98,7 +68,6 @@ async function initializeFavorites() {
 function saveFavoritesToLocalStorage() {
   try {
     localStorage.setItem('quotation-favorites', JSON.stringify(favorites));
-    console.log('Favorites backed up to localStorage:', favorites);
   } catch (error) {
     console.error('Error saving favorites to localStorage:', error);
   }
@@ -116,14 +85,13 @@ async function toggleFavorite(recordId, buttonElement) {
   try {
     if (wasFavorited) {
       // Remove from favorites
-      console.log(`Removing record ${recordId} from favorites...`);
       const response = await fetch(`/api/favorites/${recordId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         const index = favorites.indexOf(recordId);
         if (index > -1) {
@@ -131,27 +99,24 @@ async function toggleFavorite(recordId, buttonElement) {
         }
         buttonElement.classList.remove('favorited');
         buttonElement.title = 'Add to favorites';
-        console.log(`Successfully removed record ${recordId} from favorites`);
       } else {
         throw new Error(`Failed to remove from favorites: ${response.status}`);
       }
     } else {
       // Add to favorites
-      console.log(`Adding record ${recordId} to favorites...`);
       const response = await fetch(`/api/favorites/${recordId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         if (!favorites.includes(recordId)) {
           favorites.push(recordId);
         }
         buttonElement.classList.add('favorited');
         buttonElement.title = 'Remove from favorites';
-        console.log(`Successfully added record ${recordId} to favorites`);
       } else {
         throw new Error(`Failed to add to favorites: ${response.status}`);
       }
@@ -209,7 +174,7 @@ function calculateRecordPrice(record) {
   let calculatedPrice = 0;
   const components = [
     'cpu', 'cpu_cooling', 'motherboard', 'ram', 'storage1', 'storage2',
-    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others'
+    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others', 'assembly'
   ];
 
   components.forEach(component => {
@@ -236,8 +201,7 @@ function renderRecords(records) {
     return;
   }
 
-  records.forEach((record, index) => {
-    console.log(`Processing record ${index + 1}:`, record);
+  records.forEach((record) => {
     const row = document.createElement('tr');
 
     // Check if this record is favorited
@@ -295,7 +259,6 @@ function displayOnIndex(recordId) {
 
 // Function to view a record
 async function viewRecord(recordId) {
-  console.log('Viewing record with ID:', recordId);
   const modal = document.getElementById('viewModal');
   const modalContent = modal.querySelector('.modal-content');
 
@@ -312,7 +275,6 @@ async function viewRecord(recordId) {
   document.getElementById('modal-components-table').innerHTML = '<tr><td colspan="4" style="text-align: center;">Loading component details...</td></tr>';
 
   try {
-    console.log('Fetching record details from /api/quotation/' + recordId);
     const response = await fetch(`/api/quotation/${recordId}`);
 
     if (!response.ok) {
@@ -322,7 +284,6 @@ async function viewRecord(recordId) {
     }
 
     const record = await response.json();
-    console.log('Record details fetched:', record);
 
     // Populate modal with detailed record data
     document.getElementById('modal-id').textContent = record.id;
@@ -349,7 +310,8 @@ async function viewRecord(recordId) {
       { name: 'System Fan', details: record.sys_fan_details, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note, price: record.sys_fan_price },
       { name: 'OS', details: record.os_details, unit: record.os_unit, note: record.os_upgrade_note, price: record.os_price },
       { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note, price: record.monitor_price },
-      { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price }
+      { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price },
+      { name: 'Assembly', details: record.assembly_details, unit: record.assembly_unit, note: record.assembly_upgrade_note, price: record.assembly_price }
     ];
 
     let hasContent = false;
@@ -405,8 +367,6 @@ function printModal() {
 
 // Function to edit a record
 function editRecord(recordId) {
-  console.log('Editing record with ID:', recordId);
-  
   // Show edit modal with loading state
   document.getElementById('editModal').style.display = 'block';
   document.getElementById('edit-modal-id').textContent = 'Loading...';
@@ -426,18 +386,16 @@ function editRecord(recordId) {
 // Function to fetch and populate record data for editing
 async function fetchRecordForEdit(recordId) {
   try {
-    console.log('Fetching record details for editing from /api/quotation/' + recordId);
     const response = await fetch(`/api/quotation/${recordId}`);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Failed to fetch record details:', errorText);
       throw new Error(`Failed to fetch record: ${response.status}`);
     }
-    
+
     const record = await response.json();
-    console.log('Record details fetched for editing:', record);
-    
+
     // Store the original record data to preserve timestamps
     window.originalRecordData = record;
     
@@ -467,7 +425,8 @@ async function fetchRecordForEdit(recordId) {
         { name: 'System Fan', details: record.sys_fan_details, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note, price: record.sys_fan_price, field: 'sys_fan' },
         { name: 'OS', details: record.os_details, unit: record.os_unit, note: record.os_upgrade_note, price: record.os_price, field: 'os' },
         { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note, price: record.monitor_price, field: 'monitor' },
-        { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price, field: 'others' }
+        { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price, field: 'others' },
+        { name: 'Assembly', details: record.assembly_details, unit: record.assembly_unit, note: record.assembly_upgrade_note, price: record.assembly_price, field: 'assembly' }
     ];
     
     // Create editable rows for all components
@@ -594,8 +553,6 @@ async function saveRecord() {
       formData[fieldName] = input.value || '';
     });
     
-    console.log('Saving record with data:', formData);
-    
     // Send update request to server
     const response = await fetch(`/api/quotation/${recordId}`, {
       method: 'PUT',
@@ -610,9 +567,6 @@ async function saveRecord() {
       console.error('Failed to update record:', errorText);
       throw new Error(`Failed to update record: ${response.status}`);
     }
-    
-    const result = await response.json();
-    console.log('Record updated successfully:', result);
     
     // Close modal and refresh the records table
     closeEditModal();
@@ -644,8 +598,6 @@ async function deleteRecord(recordId) {
   }
   
   try {
-    console.log('Deleting record with ID:', recordId);
-    
     // Send delete request to server
     const response = await fetch(`/api/quotation/${recordId}`, {
       method: 'DELETE',
@@ -653,16 +605,13 @@ async function deleteRecord(recordId) {
         'Content-Type': 'application/json',
       }
     });
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Failed to delete record:', errorText);
       throw new Error(`Failed to delete record: ${response.status}`);
     }
-    
-    const result = await response.json();
-    console.log('Record deleted successfully:', result);
-    
+
     alert('Record deleted successfully!');
     
     // Reload the page to reflect changes

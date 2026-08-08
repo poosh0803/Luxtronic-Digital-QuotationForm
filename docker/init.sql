@@ -54,6 +54,10 @@ CREATE TABLE quotations (
     others_price NUMERIC(10, 2),
     others_unit INT,
     others_upgrade_note TEXT,
+    assembly_details TEXT,
+    assembly_price NUMERIC(10, 2),
+    assembly_unit INT,
+    assembly_upgrade_note TEXT,
     platform VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

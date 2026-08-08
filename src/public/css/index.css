@@ -823,8 +823,16 @@ table th:nth-child(7), table td:nth-child(7) {
 
 .quotation-date {
   color: #666;
-  font-size: 0.9em;
+  font-size: 1.2em;
   margin-top: 5px;
+}
+
+.quotation-validity {
+  color: #d4a44c;
+  font-size: calc(1em + 4px);
+  margin-top: 3px;
+  font-style: italic;
+  font-weight: bold;
 }
 
 .price-info {
