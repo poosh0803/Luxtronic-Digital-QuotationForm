@@ -12,7 +12,7 @@ function getTableData() {
   // Initialize all component fields as empty strings
   const components = [
     'cpu', 'cpu_cooling', 'motherboard', 'ram', 'storage1', 'storage2',
-    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others'
+    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others', 'assembly'
   ];
   
   components.forEach(component => {
@@ -41,7 +41,8 @@ function getTableData() {
       'system_fan': 'sys_fan',
       'os': 'os',
       'monitor': 'monitor',
-      'others': 'others'
+      'others': 'others',
+      'assembly': 'assembly'
     };
     
     const mappedComponent = partMapping[part];

@@ -121,7 +121,11 @@ router.post('/quotation', (req, res, next) => {
     others_details,
     others_unit,
     others_price,
-    others_upgrade_note
+    others_upgrade_note,
+    assembly_details,
+    assembly_unit,
+    assembly_price,
+    assembly_upgrade_note
   } = req.body;
 
   try {
@@ -134,11 +138,13 @@ router.post('/quotation', (req, res, next) => {
         storage2_price, storage2_upgrade_note, gpu_details, gpu_unit, gpu_price, gpu_upgrade_note, case_details, case_unit,
         case_price, case_upgrade_note, psu_details, psu_unit, psu_price, psu_upgrade_note, sys_fan_details, sys_fan_unit,
         sys_fan_price, sys_fan_upgrade_note, os_details, os_unit, os_price, os_upgrade_note, monitor_details, monitor_unit,
-        monitor_price, monitor_upgrade_note, others_details, others_unit, others_price, others_upgrade_note, created_at
+        monitor_price, monitor_upgrade_note, others_details, others_unit, others_price, others_upgrade_note,
+        assembly_details, assembly_unit, assembly_price, assembly_upgrade_note, created_at
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
         $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
-        $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56
+        $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56,
+        $57, $58, $59, $60
       ) RETURNING *`,
       [
         customer_name, parseFloatOrNull(final_price), platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
@@ -148,7 +154,8 @@ router.post('/quotation', (req, res, next) => {
         parseFloatOrNull(storage2_price), storage2_upgrade_note, gpu_details, parseIntOrNull(gpu_unit), parseFloatOrNull(gpu_price), gpu_upgrade_note, case_details, parseIntOrNull(case_unit),
         parseFloatOrNull(case_price), case_upgrade_note, psu_details, parseIntOrNull(psu_unit), parseFloatOrNull(psu_price), psu_upgrade_note, sys_fan_details, parseIntOrNull(sys_fan_unit),
         parseFloatOrNull(sys_fan_price), sys_fan_upgrade_note, os_details, parseIntOrNull(os_unit), parseFloatOrNull(os_price), os_upgrade_note, monitor_details, parseIntOrNull(monitor_unit),
-        parseFloatOrNull(monitor_price), monitor_upgrade_note, others_details, parseIntOrNull(others_unit), parseFloatOrNull(others_price), others_upgrade_note, created_at
+        parseFloatOrNull(monitor_price), monitor_upgrade_note, others_details, parseIntOrNull(others_unit), parseFloatOrNull(others_price), others_upgrade_note,
+        assembly_details, parseIntOrNull(assembly_unit), parseFloatOrNull(assembly_price), assembly_upgrade_note, created_at
       ]
     );
     res.status(201).json(result.rows[0]);
@@ -224,7 +231,11 @@ router.put('/quotation/:id', (req, res, next) => {
     others_details,
     others_unit,
     others_price,
-    others_upgrade_note
+    others_upgrade_note,
+    assembly_details,
+    assembly_unit,
+    assembly_price,
+    assembly_upgrade_note
   } = req.body;
 
   try {
@@ -243,8 +254,9 @@ router.put('/quotation/:id', (req, res, next) => {
         os_details = $44, os_unit = $45, os_price = $46, os_upgrade_note = $47,
         monitor_details = $48, monitor_unit = $49, monitor_price = $50, monitor_upgrade_note = $51,
         others_details = $52, others_unit = $53, others_price = $54, others_upgrade_note = $55,
-        created_at = $56
-      WHERE id = $57 RETURNING *`,
+        assembly_details = $56, assembly_unit = $57, assembly_price = $58, assembly_upgrade_note = $59,
+        created_at = $60
+      WHERE id = $61 RETURNING *`,
       [
         customer_name, final_price, platform, cpu_details, parseIntOrNull(cpu_unit), parseFloatOrNull(cpu_price), cpu_upgrade_note,
         cpu_cooling_details, parseIntOrNull(cpu_cooling_unit), parseFloatOrNull(cpu_cooling_price), cpu_cooling_upgrade_note,
@@ -259,6 +271,7 @@ router.put('/quotation/:id', (req, res, next) => {
         os_details, parseIntOrNull(os_unit), parseFloatOrNull(os_price), os_upgrade_note,
         monitor_details, parseIntOrNull(monitor_unit), parseFloatOrNull(monitor_price), monitor_upgrade_note,
         others_details, parseIntOrNull(others_unit), parseFloatOrNull(others_price), others_upgrade_note,
+        assembly_details, parseIntOrNull(assembly_unit), parseFloatOrNull(assembly_price), assembly_upgrade_note,
         created_at, id
       ]
     );

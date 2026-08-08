@@ -174,7 +174,7 @@ function calculateRecordPrice(record) {
   let calculatedPrice = 0;
   const components = [
     'cpu', 'cpu_cooling', 'motherboard', 'ram', 'storage1', 'storage2',
-    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others'
+    'gpu', 'case', 'psu', 'sys_fan', 'os', 'monitor', 'others', 'assembly'
   ];
 
   components.forEach(component => {
@@ -310,7 +310,8 @@ async function viewRecord(recordId) {
       { name: 'System Fan', details: record.sys_fan_details, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note, price: record.sys_fan_price },
       { name: 'OS', details: record.os_details, unit: record.os_unit, note: record.os_upgrade_note, price: record.os_price },
       { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note, price: record.monitor_price },
-      { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price }
+      { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price },
+      { name: 'Assembly', details: record.assembly_details, unit: record.assembly_unit, note: record.assembly_upgrade_note, price: record.assembly_price }
     ];
 
     let hasContent = false;
@@ -424,7 +425,8 @@ async function fetchRecordForEdit(recordId) {
         { name: 'System Fan', details: record.sys_fan_details, unit: record.sys_fan_unit, note: record.sys_fan_upgrade_note, price: record.sys_fan_price, field: 'sys_fan' },
         { name: 'OS', details: record.os_details, unit: record.os_unit, note: record.os_upgrade_note, price: record.os_price, field: 'os' },
         { name: 'Monitor', details: record.monitor_details, unit: record.monitor_unit, note: record.monitor_upgrade_note, price: record.monitor_price, field: 'monitor' },
-        { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price, field: 'others' }
+        { name: 'Others', details: record.others_details, unit: record.others_unit, note: record.others_upgrade_note, price: record.others_price, field: 'others' },
+        { name: 'Assembly', details: record.assembly_details, unit: record.assembly_unit, note: record.assembly_upgrade_note, price: record.assembly_price, field: 'assembly' }
     ];
     
     // Create editable rows for all components
