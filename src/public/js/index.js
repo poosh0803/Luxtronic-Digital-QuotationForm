@@ -130,7 +130,7 @@ function displayQuotation(quotation) {
 
         // Show all components, even if they don't have details
         const hasDetails = details && details.trim();
-        const displayDetails = hasDetails ? details : 'No details specified';
+        const displayDetails = hasDetails ? details : (component.key === 'assembly' ? 'Assembly Fee' : 'No details specified');
         const itemClass = hasDetails ? 'component-item' : 'component-item component-empty';
         const hasPrice = price !== null && price !== undefined && price !== '' && parseInt(unit, 10) > 0;
         const priceHtml = hasPrice
