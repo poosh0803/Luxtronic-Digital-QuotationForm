@@ -46,13 +46,13 @@
   <!-- Main Content -->
   <main>
     <div class="form-container">
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+      <div class="page-heading-row">
         <h1>New Quotation</h1>
-        <div style="position: relative; width: 200px; height: 40px; background-color: #ddd; border-radius: 20px; overflow: hidden;">
-          <div id="slider" style="position: absolute; width: 50%; height: 100%; background-color: red; border-radius: 20px; transition: left 0.3s ease; left: 0; z-index: 1;"></div>
-          <div style="display: flex; justify-content: space-between; align-items: center; height: 100%; padding: 0 10px; position: relative; z-index: 2;">
-            <span id="amd-label" style="color: white; font-weight: bold;">AMD</span>
-            <span id="intel-label" style="color: black; font-weight: bold;">INTEL</span>
+        <div class="platform-toggle">
+          <div id="slider" class="platform-toggle-slider" style="background-color: red; left: 0;"></div>
+          <div class="platform-toggle-options">
+            <span id="amd-label" class="platform-toggle-label" style="color: white;">AMD</span>
+            <span id="intel-label" class="platform-toggle-label" style="color: black;">INTEL</span>
           </div>
         </div>
       </div>
@@ -277,13 +277,17 @@
         </div>
         <div class="price-input-container">
           <label for="calculated-price">Calculated Price:</label>
-          <input type="number" id="calculated-price" name="calculated-price" placeholder="Calculated price" step="0.01" min="0" readonly>
-          <span class="currency">AUD</span>
+          <div class="price-field">
+            <input type="number" id="calculated-price" name="calculated-price" placeholder="Calculated price" step="0.01" min="0" readonly>
+            <span class="currency">AUD</span>
+          </div>
         </div>
         <div class="price-input-container">
           <label for="final-price">Final Price:</label>
-          <input type="number" id="final-price" name="final-price" placeholder="Enter total price" step="0.01" min="0">
-          <span class="currency">AUD</span>
+          <div class="price-field">
+            <input type="number" id="final-price" name="final-price" placeholder="Enter total price" step="0.01" min="0">
+            <span class="currency">AUD</span>
+          </div>
         </div>
         <button type="submit" class="submit-btn">
           <i class="fas fa-save"></i>
