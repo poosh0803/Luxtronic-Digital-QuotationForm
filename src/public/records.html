@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/printForm.css">
+  <link rel="stylesheet" href="css/records.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 </head>
@@ -18,11 +19,11 @@
     <div class="logo-container">
       <div class="logo">L</div>
       <div class="brand-name">LUXTRONIC</div>
-      <div class="subtitle">Digital Quotation Form <span id="currentDateTime"
+      <div class="tagline">Digital Quotation Form <span id="currentDateTime"
           style="font-size:0.9em; font-weight:normal; margin-left:10px;"></span></div>
     </div>
-    <div class="dark-mode-toggle">
-      <i id="theme-icon" class="fas fa-moon"></i>
+    <div class="dark-mode-toggle" id="darkModeToggle">
+      <i id="themeIcon" class="fas fa-moon"></i>
     </div>
   </header>
   <!-- Navigation Bar -->
@@ -31,11 +32,11 @@
       <i class="fas fa-th-large"></i>
       <span class="nav-text">Latest</span>
     </a>
-    <a href="/newQuotation" class="nav-item">
+    <a href="/newQuotation" class="nav-item nav-item-accent">
       <i class="fas fa-plus"></i>
       <span class="nav-text">New Quotation</span>
     </a>
-    <a href="/records" class="nav-item active">
+    <a href="/records" class="nav-item">
       <i class="fas fa-folder"></i>
       <span class="nav-text">Quotation Records</span>
     </a>
@@ -220,6 +221,7 @@
     </div>
   </div>
 
+  <script src="js/common.js"></script>
   <script src="js/records.js"></script>
 </body>
 </html>

@@ -1,0 +1,199 @@
+/* Quotation Records page — table, filters, view/edit modals. */
+
+.records-header h1 {
+  font-size: 24px;
+}
+
+.btn-filter {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: var(--muted);
+}
+
+.btn-filter:hover {
+  border-color: var(--brand);
+  color: var(--brand-dark);
+  background: #fff;
+}
+
+.btn-filter.active {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.btn-filter.active:hover {
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+/* Records table */
+.records-table {
+  box-shadow: none;
+  background: var(--panel);
+  border-radius: 8px;
+}
+
+.records-table th,
+.records-table td {
+  border: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.records-table th {
+  background: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.records-table tr:nth-child(even) {
+  background: none;
+}
+
+.records-table tr:hover {
+  background: #fafafa;
+}
+
+/* View / Edit modals */
+.modal-header {
+  background-color: var(--brand);
+}
+
+.price-display {
+  color: var(--brand) !important;
+}
+
+.modal-table {
+  box-shadow: none;
+}
+
+.modal-table th,
+.modal-table td {
+  border: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-table th {
+  background: none;
+  color: var(--muted);
+}
+
+.modal-table tr:nth-child(even) {
+  background: none;
+}
+
+.modal-table tr:hover {
+  background: #fafafa;
+}
+
+.components-table-section h3 {
+  border-bottom-color: var(--brand);
+}
+
+/* Buttons unstyled until now: print / save / cancel */
+.btn-print {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #ddd;
+}
+
+.btn-print:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-save,
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-save {
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  color: #fff;
+  font-weight: bold;
+}
+
+.btn-save:hover {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+.btn-cancel {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: var(--text);
+}
+
+.btn-cancel:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+/* -------------------------------------- */
+/*              DARK MODE                */
+/* -------------------------------------- */
+body.dark-mode .records-table,
+body.dark-mode .modal-table {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+}
+
+body.dark-mode .records-table th,
+body.dark-mode .records-table td,
+body.dark-mode .modal-table th,
+body.dark-mode .modal-table td {
+  border-color: #333;
+}
+
+body.dark-mode .records-table tr:hover,
+body.dark-mode .modal-table tr:hover {
+  background: #292929;
+}
+
+body.dark-mode .info-item span {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+body.dark-mode .btn-print,
+body.dark-mode .btn-cancel {
+  background-color: #2e2e2e;
+  color: #f0f0f0;
+  border-color: #444;
+}
+
+body.dark-mode .btn-print:hover,
+body.dark-mode .btn-cancel:hover {
+  background-color: #3a3a3a;
+}
+
+body.dark-mode .btn-save {
+  background-color: #f0b33e;
+  border-color: #f0b33e;
+  color: #1a1a1a;
+}
+
+body.dark-mode .btn-save:hover {
+  background-color: #d89b23;
+  border-color: #d89b23;
+}
+
+body.dark-mode .price-display {
+  color: #f0b33e !important;
+}

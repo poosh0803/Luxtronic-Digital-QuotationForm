@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
   updateDateTime();
   setInterval(updateDateTime, 60000);
 
-  // Initialize dark mode
-  initializeDarkMode();
-
   // Initialize search functionality
   initializeSearch();
 
@@ -34,27 +31,6 @@ function updateDateTime() {
     minute: '2-digit' 
   };
   document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
-}
-
-// Dark mode functionality
-function initializeDarkMode() {
-  const themeIcon = document.getElementById('theme-icon');
-  const body = document.body;
-
-  // Check for saved theme preference or default to light mode
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  body.className = savedTheme;
-  themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-
-  themeIcon.addEventListener('click', () => {
-    const currentTheme = body.className;
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    body.className = newTheme;
-    themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    
-    localStorage.setItem('theme', newTheme);
-  });
 }
 
 // Initialize search functionality
