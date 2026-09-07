@@ -1,43 +1,16 @@
 let showPartPrices = false;
 
-// Dark mode functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize dark mode
-    initializeDarkMode();
-    
     // Update current date/time
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    
+
     // Load quotation history and setup selector
     loadQuotationHistory();
-    
+
     // Setup quotation selector event listener
     setupQuotationSelector();
 });
-
-function initializeDarkMode() {
-    const themeIcon = document.getElementById('theme-icon');
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-        themeIcon.classList.replace('fa-moon', 'fa-sun');
-    }
-    
-    themeIcon.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isNowDark = document.body.classList.contains('dark-mode');
-        
-        localStorage.setItem('darkMode', isNowDark);
-        
-        if (isNowDark) {
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
-        } else {
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-        }
-    });
-}
 
 function updateDateTime() {
     const now = new Date();
