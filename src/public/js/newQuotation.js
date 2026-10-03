@@ -128,3 +128,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupOdooLookup({
+    container: document.querySelector('table'),
+    toggle: document.getElementById('odoo-toggle'),
+    stateLabel: document.getElementById('odoo-toggle-state'),
+    detailsRowKey: (input) => (input.name.endsWith('-details') ? input.name.slice(0, -'-details'.length) : null),
+    priceInputFor: (row) => row.querySelector('input[type="number"]'),
+  });
+});

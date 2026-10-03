@@ -197,3 +197,20 @@ body.dark-mode .btn-save:hover {
 body.dark-mode .price-display {
   color: #f0b33e !important;
 }
+
+.components-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--brand);
+}
+
+.components-heading-row h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  flex: 1;
+}

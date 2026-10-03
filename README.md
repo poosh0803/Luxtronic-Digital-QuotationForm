@@ -63,7 +63,12 @@ DB_NAME=luxtronic_db
 DB_PASSWORD=luxtronic_password
 DB_PORT=5432
 PORT=80
+ODOO_API_URL=http://localhost:4001
 ```
+
+`ODOO_API_URL` is the base URL of the Luxtronic-Odoo-API service. It powers the
+"Odoo Lookup" toggle on the New Quotation page (product search against Odoo,
+filling in a part's details and price); the rest of the app works without it.
 
 ### 3. Install dependencies and run
 
