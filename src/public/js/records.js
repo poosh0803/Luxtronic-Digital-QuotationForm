@@ -365,6 +365,24 @@ function printModal() {
   window.print();
 }
 
+// Odoo lookup for the edit modal's component rows. The table body is replaced
+// each time a record loads, but the element itself is stable, so delegation
+// set up once here keeps working.
+document.addEventListener('DOMContentLoaded', () => {
+  setupOdooLookup({
+    container: document.getElementById('edit-modal-components-table'),
+    toggle: document.getElementById('odoo-toggle'),
+    stateLabel: document.getElementById('odoo-toggle-state'),
+    // data-field looks like "cpu_cooling_details"; the shared category map
+    // uses hyphens ("cpu-cooling").
+    detailsRowKey: (input) => {
+      const field = input.getAttribute('data-field') || '';
+      return field.endsWith('_details') ? field.slice(0, -'_details'.length).replace(/_/g, '-') : null;
+    },
+    priceInputFor: (row) => row.querySelector('.price-input'),
+  });
+});
+
 // Function to edit a record
 function editRecord(recordId) {
   // Show edit modal with loading state

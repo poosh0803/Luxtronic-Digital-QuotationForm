@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/printForm.css">
   <link rel="stylesheet" href="css/records.css">
+  <link rel="stylesheet" href="css/odooLookup.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 </head>
@@ -191,7 +192,12 @@
 
         <!-- Components Table Section -->
         <div class="components-table-section">
-          <h3>Component Details</h3>
+          <div class="components-heading-row">
+            <h3>Component Details</h3>
+            <button type="button" id="odoo-toggle" class="odoo-toggle" aria-pressed="false" title="Search Odoo products while typing in the Details column">
+              <i class="fas fa-database"></i> Odoo Lookup: <span id="odoo-toggle-state">Off</span>
+            </button>
+          </div>
           <table class="modal-table">
             <thead>
               <tr>
@@ -222,6 +228,7 @@
   </div>
 
   <script src="js/common.js"></script>
+  <script src="js/odooLookup.js"></script>
   <script src="js/records.js"></script>
 </body>
 </html>

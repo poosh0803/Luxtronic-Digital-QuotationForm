@@ -1,0 +1,125 @@
+/* Odoo product lookup: toggle button + suggestion dropdown (shared by the
+   New Quotation page and the Records edit modal). */
+.odoo-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.odoo-toggle:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.odoo-toggle.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.odoo-toggle.active:hover {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+.odoo-menu {
+  position: absolute;
+  z-index: 2000; /* above the records modals (1000) */
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.odoo-menu[hidden] {
+  display: none;
+}
+
+.odoo-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.odoo-menu-item:last-child {
+  border-bottom: none;
+}
+
+.odoo-menu-item:hover {
+  background: #fafafa;
+}
+
+.odoo-menu-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.odoo-menu-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.odoo-menu-meta .in-stock {
+  color: var(--ok-text);
+  font-weight: 600;
+}
+
+.odoo-menu-meta .out-of-stock {
+  color: var(--danger-text);
+  font-weight: 600;
+}
+
+.odoo-menu-message {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+body.dark-mode .odoo-toggle {
+  background: #2e2e2e;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+body.dark-mode .odoo-toggle.active {
+  background: #f0b33e;
+  border-color: #f0b33e;
+  color: #1a1a1a;
+}
+
+body.dark-mode .odoo-menu {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+body.dark-mode .odoo-menu-item {
+  border-color: #333;
+}
+
+body.dark-mode .odoo-menu-item:hover {
+  background: #292929;
+}
+
+body.dark-mode .odoo-menu-name {
+  color: #f0f0f0;
+}
+
+body.dark-mode .odoo-menu-meta,
+body.dark-mode .odoo-menu-message {
+  color: #aaa;
+}
