@@ -128,3 +128,146 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// Odoo product lookup: when toggled on, typing in a Details cell suggests
+// products from Odoo (via /api/odoo/products) and fills in details + price.
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('odoo-toggle');
+  const stateLabel = document.getElementById('odoo-toggle-state');
+  const table = document.querySelector('table');
+  if (!toggle || !table) return;
+
+  const menu = document.createElement('div');
+  menu.className = 'odoo-menu';
+  menu.hidden = true;
+  document.body.appendChild(menu);
+
+  let enabled = false;
+  let activeInput = null;
+  let debounceTimer = null;
+  let requestSeq = 0;
+  let selecting = false;
+
+  const isDetailsInput = (el) =>
+    el && el.tagName === 'INPUT' && /-details$/.test(el.name || '');
+
+  const closeMenu = () => {
+    menu.hidden = true;
+    menu.innerHTML = '';
+  };
+
+  const setEnabled = (on) => {
+    enabled = on;
+    toggle.classList.toggle('active', on);
+    toggle.setAttribute('aria-pressed', String(on));
+    stateLabel.textContent = on ? 'On' : 'Off';
+    try { localStorage.setItem('odooLookup', on ? 'on' : 'off'); } catch (e) { /* ignore */ }
+    if (!on) closeMenu();
+  };
+
+  const positionMenu = () => {
+    if (!activeInput) return;
+    const rect = activeInput.getBoundingClientRect();
+    menu.style.left = `${rect.left + window.scrollX}px`;
+    menu.style.top = `${rect.bottom + window.scrollY + 2}px`;
+    menu.style.width = `${Math.max(rect.width, 360)}px`;
+  };
+
+  const renderMessage = (message) => {
+    menu.innerHTML = '';
+    const div = document.createElement('div');
+    div.className = 'odoo-menu-message';
+    div.textContent = message;
+    menu.appendChild(div);
+    positionMenu();
+    menu.hidden = false;
+  };
+
+  const selectProduct = (product) => {
+    if (!activeInput) return;
+    const row = activeInput.closest('tr');
+    activeInput.value = product.name;
+    const priceInput = row.querySelector('input[type="number"]');
+    if (priceInput && typeof product.price === 'number') {
+      priceInput.value = product.price.toFixed(2);
+    }
+    closeMenu();
+    // Bubble an input event so the calculated price updates; skip our own
+    // listener so the filled-in name does not trigger another search.
+    selecting = true;
+    activeInput.dispatchEvent(new Event('input', { bubbles: true }));
+    selecting = false;
+  };
+
+  const renderResults = (products) => {
+    if (!products.length) return renderMessage('No matching products in Odoo');
+    menu.innerHTML = '';
+    products.forEach((product) => {
+      const item = document.createElement('div');
+      item.className = 'odoo-menu-item';
+
+      const name = document.createElement('div');
+      name.className = 'odoo-menu-name';
+      name.textContent = product.name;
+
+      const meta = document.createElement('div');
+      meta.className = 'odoo-menu-meta';
+      const sku = document.createElement('span');
+      sku.textContent = product.sku || 'no SKU';
+      const price = document.createElement('span');
+      price.textContent = typeof product.price === 'number' ? `$${product.price.toFixed(2)}` : '-';
+      const stock = document.createElement('span');
+      stock.className = product.stock > 0 ? 'in-stock' : 'out-of-stock';
+      stock.textContent = `${product.stock} in stock`;
+      meta.append(sku, price, stock);
+
+      item.append(name, meta);
+      // mousedown fires before the input blurs, so the selection is not lost.
+      item.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectProduct(product);
+      });
+      menu.appendChild(item);
+    });
+    positionMenu();
+    menu.hidden = false;
+  };
+
+  const search = async (query) => {
+    const seq = ++requestSeq;
+    renderMessage('Searching Odoo...');
+    try {
+      const res = await fetch(`/api/odoo/products?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      if (seq !== requestSeq) return; // a newer search superseded this one
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      renderResults(data.products);
+    } catch (error) {
+      if (seq !== requestSeq) return;
+      console.error('Odoo lookup failed:', error);
+      renderMessage('Could not reach Odoo. Is the Odoo API running?');
+    }
+  };
+
+  toggle.addEventListener('click', () => setEnabled(!enabled));
+
+  table.addEventListener('input', (event) => {
+    if (!enabled || selecting || !isDetailsInput(event.target)) return;
+    activeInput = event.target;
+    clearTimeout(debounceTimer);
+    const query = activeInput.value.trim();
+    if (query.length < 2) return closeMenu();
+    debounceTimer = setTimeout(() => search(query), 250);
+  });
+
+  table.addEventListener('focusout', (event) => {
+    if (isDetailsInput(event.target)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', positionMenu);
+
+  try { setEnabled(localStorage.getItem('odooLookup') === 'on'); } catch (e) { setEnabled(false); }
+});

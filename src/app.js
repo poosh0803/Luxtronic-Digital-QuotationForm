@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const middleware = require('./route/middleware');
+const odooRouter = require('./route/odoo');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json()); // Keep JSON parser for other endpoints
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Odoo product lookup (proxies the Luxtronic-Odoo-API LAN service)
+app.use('/api/odoo', odooRouter);
 
 // Use middleware for quotation routes
 app.use('/api', middleware);
