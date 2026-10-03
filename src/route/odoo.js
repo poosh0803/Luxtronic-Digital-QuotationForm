@@ -25,19 +25,22 @@ async function loadProducts() {
 
 // Odoo category paths look like "CPU / AMD / 9000" (sometimes prefixed "All / ").
 // A product is in category "CPU" if its path is "CPU" or sits anywhere below it.
+// A leading "=" (e.g. "=Display") matches that exact path only, not its children.
 const categoryPath = (p) =>
   (Array.isArray(p.categ_id) ? text(p.categ_id[1]) : '').replace(/^all\s*\/\s*/i, '');
 
 function inCategory(p, category) {
   const path = categoryPath(p).toLowerCase();
-  const wanted = category.toLowerCase();
-  return path === wanted || path.startsWith(`${wanted} /`);
+  const exact = category.startsWith('=');
+  const wanted = (exact ? category.slice(1) : category).trim().toLowerCase();
+  return path === wanted || (!exact && path.startsWith(`${wanted} /`));
 }
 
-function searchProducts(products, query, category = '') {
+// `categories` is a list; a product matching any entry is kept. Empty = no filter.
+function searchProducts(products, query, categories = []) {
   const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
   return products
-    .filter((p) => !category || inCategory(p, category))
+    .filter((p) => !categories.length || categories.some((c) => inCategory(p, c)))
     .filter((p) => {
       const haystack = `${text(p.display_name)} ${text(p.default_code)} ${text(p.barcode)}`.toLowerCase();
       return terms.every((t) => haystack.includes(t));
@@ -62,8 +65,9 @@ router.get('/products', async (req, res) => {
   if (!odooApiUrl()) {
     return res.status(503).json({ error: 'ODOO_API_URL is not configured' });
   }
+  const categories = [].concat(req.query.category || []).map((c) => String(c).trim()).filter(Boolean);
   try {
-    res.json({ products: searchProducts(await loadProducts(), q, (req.query.category || '').trim()) });
+    res.json({ products: searchProducts(await loadProducts(), q, categories) });
   } catch (error) {
     console.error('Odoo lookup error:', error);
     res.status(502).json({ error: 'Failed to reach the Odoo API', message: error.message });

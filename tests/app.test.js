@@ -77,9 +77,20 @@ describe('searchProducts', () => {
       { id: 3, display_name: 'Ryzen board', categ_id: [12, 'All / CPU'], qty_available: 1 },
       { id: 4, display_name: 'Ryzen 5000 box', categ_id: [13, 'CPU Accessories'], qty_available: 1 },
     ];
-    const result = searchProducts(cats, 'ryzen', 'CPU');
+    const result = searchProducts(cats, 'ryzen', ['CPU']);
     expect(result.map((p) => p.id)).toEqual([1, 3]);
     expect(result[0].category).toBe('CPU / AMD / 9000');
+  });
+
+  test('accepts several categories and exact-only matches', () => {
+    const cats = [
+      { id: 1, display_name: 'A monitor', categ_id: [1, 'Display'], qty_available: 1 },
+      { id: 2, display_name: 'A monitor stand', categ_id: [2, 'Display / Stand'], qty_available: 1 },
+      { id: 3, display_name: 'A 27 monitor', categ_id: [3, 'Display / 27" / QHD'], qty_available: 1 },
+      { id: 4, display_name: 'A cooler', categ_id: [4, 'Cooler / AirCool'], qty_available: 1 },
+    ];
+    expect(searchProducts(cats, 'a', ['=Display', 'Display / 27"']).map((p) => p.id)).toEqual([1, 3]);
+    expect(searchProducts(cats, 'a', ['Display', 'Cooler / AirCool']).map((p) => p.id)).toEqual([1, 2, 3, 4]);
   });
 
   test('normalises unset Odoo text fields to empty strings', () => {

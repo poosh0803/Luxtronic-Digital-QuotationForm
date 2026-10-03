@@ -148,11 +148,27 @@ document.addEventListener('DOMContentLoaded', () => {
   let requestSeq = 0;
   let selecting = false;
 
-  // Rows limited to one Odoo category (and its sub-categories). Rows not listed
-  // here search every product. Keyed by the row's input name prefix.
-  const ROW_CATEGORIES = { cpu: 'CPU' };
+  // Each part row only searches the Odoo categories that make sense for it
+  // (a category includes its sub-categories; "=Name" matches that exact
+  // category only). Keyed by the row's input name prefix. OS, Others and
+  // Assembly are not listed, so they search every product.
+  // Deliberately left out: CASE / LCD, PSU / Cable, SSD / Heatsink,
+  // FAN / HUB, Display / Stand, Cooler / ThermalPaste.
+  const ROW_CATEGORIES = {
+    'cpu': ['CPU'],
+    'cpu-cooling': ['Cooler / AirCool', 'Cooler / WaterCool'],
+    'motherboard': ['MB'],
+    'ram': ['DRAM'],
+    'storage1': ['SSD / NVME', 'SSD / SATA', 'SSD / mSATA', 'HDD'],
+    'storage2': ['SSD / NVME', 'SSD / SATA', 'SSD / mSATA', 'HDD'],
+    'gpu': ['GPU'],
+    'case': ['CASE / ATX', 'CASE / E-ATX', 'CASE / mATX'],
+    'psu': ['PSU / Modular', 'PSU / Non-Modular'],
+    'sys-fan': ['FAN / 120mm', 'FAN / 140mm', 'FAN / 160mm'],
+    'monitor': ['=Display', 'Display / 24"', 'Display / 27"', 'Display / 32"'],
+  };
 
-  const categoryFor = (input) => ROW_CATEGORIES[input.name.replace(/-details$/, '')] || '';
+  const categoriesFor = (input) => ROW_CATEGORIES[input.name.replace(/-details$/, '')] || [];
 
   const isDetailsInput = (el) =>
     el && el.tagName === 'INPUT' && /-details$/.test(el.name || '');
@@ -206,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderResults = (products) => {
-    if (!products.length) return renderMessage(activeInput && categoryFor(activeInput) ? `No matching ${categoryFor(activeInput)} products in Odoo` : 'No matching products in Odoo');
+    if (!products.length) return renderMessage(activeInput && categoriesFor(activeInput).length ? 'No matching products in the right Odoo category for this row' : 'No matching products in Odoo');
     menu.innerHTML = '';
     products.forEach((product) => {
       const item = document.createElement('div');
@@ -241,12 +257,12 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.hidden = false;
   };
 
-  const search = async (query, category) => {
+  const search = async (query, categories) => {
     const seq = ++requestSeq;
     renderMessage('Searching Odoo...');
     try {
       const params = new URLSearchParams({ q: query });
-      if (category) params.set('category', category);
+      categories.forEach((c) => params.append('category', c));
       const res = await fetch(`/api/odoo/products?${params}`);
       const data = await res.json();
       if (seq !== requestSeq) return; // a newer search superseded this one
@@ -267,8 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(debounceTimer);
     const query = activeInput.value.trim();
     if (query.length < 2) return closeMenu();
-    const category = categoryFor(activeInput);
-    debounceTimer = setTimeout(() => search(query, category), 250);
+    const categories = categoriesFor(activeInput);
+    debounceTimer = setTimeout(() => search(query, categories), 250);
   });
 
   table.addEventListener('focusout', (event) => {
