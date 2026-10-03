@@ -70,6 +70,18 @@ describe('searchProducts', () => {
     expect(searchProducts(products, 'cpu-').map((p) => p.id)).toEqual([2, 1]);
   });
 
+  test('limits results to a category and its sub-categories', () => {
+    const cats = [
+      { id: 1, display_name: 'Ryzen 9700X', categ_id: [10, 'CPU / AMD / 9000'], qty_available: 1 },
+      { id: 2, display_name: 'Ryzen cooler', categ_id: [11, 'Cooler / AirCool'], qty_available: 1 },
+      { id: 3, display_name: 'Ryzen board', categ_id: [12, 'All / CPU'], qty_available: 1 },
+      { id: 4, display_name: 'Ryzen 5000 box', categ_id: [13, 'CPU Accessories'], qty_available: 1 },
+    ];
+    const result = searchProducts(cats, 'ryzen', 'CPU');
+    expect(result.map((p) => p.id)).toEqual([1, 3]);
+    expect(result[0].category).toBe('CPU / AMD / 9000');
+  });
+
   test('normalises unset Odoo text fields to empty strings', () => {
     expect(searchProducts(products, 'corsair')[0].sku).toBe('');
   });

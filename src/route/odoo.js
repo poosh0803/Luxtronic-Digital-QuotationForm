@@ -23,9 +23,21 @@ async function loadProducts() {
   return cache.products;
 }
 
-function searchProducts(products, query) {
+// Odoo category paths look like "CPU / AMD / 9000" (sometimes prefixed "All / ").
+// A product is in category "CPU" if its path is "CPU" or sits anywhere below it.
+const categoryPath = (p) =>
+  (Array.isArray(p.categ_id) ? text(p.categ_id[1]) : '').replace(/^all\s*\/\s*/i, '');
+
+function inCategory(p, category) {
+  const path = categoryPath(p).toLowerCase();
+  const wanted = category.toLowerCase();
+  return path === wanted || path.startsWith(`${wanted} /`);
+}
+
+function searchProducts(products, query, category = '') {
   const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
   return products
+    .filter((p) => !category || inCategory(p, category))
     .filter((p) => {
       const haystack = `${text(p.display_name)} ${text(p.default_code)} ${text(p.barcode)}`.toLowerCase();
       return terms.every((t) => haystack.includes(t));
@@ -36,6 +48,7 @@ function searchProducts(products, query) {
       id: p.id,
       name: text(p.display_name),
       sku: text(p.default_code),
+      category: categoryPath(p),
       price: p.list_price,
       stock: p.qty_available,
     }));
@@ -50,7 +63,7 @@ router.get('/products', async (req, res) => {
     return res.status(503).json({ error: 'ODOO_API_URL is not configured' });
   }
   try {
-    res.json({ products: searchProducts(await loadProducts(), q) });
+    res.json({ products: searchProducts(await loadProducts(), q, (req.query.category || '').trim()) });
   } catch (error) {
     console.error('Odoo lookup error:', error);
     res.status(502).json({ error: 'Failed to reach the Odoo API', message: error.message });

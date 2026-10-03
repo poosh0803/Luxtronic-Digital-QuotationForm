@@ -148,6 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let requestSeq = 0;
   let selecting = false;
 
+  // Rows limited to one Odoo category (and its sub-categories). Rows not listed
+  // here search every product. Keyed by the row's input name prefix.
+  const ROW_CATEGORIES = { cpu: 'CPU' };
+
+  const categoryFor = (input) => ROW_CATEGORIES[input.name.replace(/-details$/, '')] || '';
+
   const isDetailsInput = (el) =>
     el && el.tagName === 'INPUT' && /-details$/.test(el.name || '');
 
@@ -200,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderResults = (products) => {
-    if (!products.length) return renderMessage('No matching products in Odoo');
+    if (!products.length) return renderMessage(activeInput && categoryFor(activeInput) ? `No matching ${categoryFor(activeInput)} products in Odoo` : 'No matching products in Odoo');
     menu.innerHTML = '';
     products.forEach((product) => {
       const item = document.createElement('div');
@@ -219,7 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const stock = document.createElement('span');
       stock.className = product.stock > 0 ? 'in-stock' : 'out-of-stock';
       stock.textContent = `${product.stock} in stock`;
-      meta.append(sku, price, stock);
+      const cat = document.createElement('span');
+      cat.textContent = product.category;
+      meta.append(sku, cat, price, stock);
 
       item.append(name, meta);
       // mousedown fires before the input blurs, so the selection is not lost.
@@ -233,11 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.hidden = false;
   };
 
-  const search = async (query) => {
+  const search = async (query, category) => {
     const seq = ++requestSeq;
     renderMessage('Searching Odoo...');
     try {
-      const res = await fetch(`/api/odoo/products?q=${encodeURIComponent(query)}`);
+      const params = new URLSearchParams({ q: query });
+      if (category) params.set('category', category);
+      const res = await fetch(`/api/odoo/products?${params}`);
       const data = await res.json();
       if (seq !== requestSeq) return; // a newer search superseded this one
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
@@ -257,7 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(debounceTimer);
     const query = activeInput.value.trim();
     if (query.length < 2) return closeMenu();
-    debounceTimer = setTimeout(() => search(query), 250);
+    const category = categoryFor(activeInput);
+    debounceTimer = setTimeout(() => search(query, category), 250);
   });
 
   table.addEventListener('focusout', (event) => {
