@@ -190,10 +190,19 @@
     print-color-adjust: exact !important;
   }
 
-  /* Minimal page margins */
+  /* Luxtronic print standard: A4, @page margin 0, safe margin as padding on
+     .main-content (see the rule below). Chrome's Margins option can discard
+     an @page margin but never padding, so Default/Minimum/None print the same. */
   @page {
-    margin: 5mm !important;
     size: A4;
+    margin: 0;
+  }
+
+  .main-content {
+    margin: 0 !important;
+    padding: 0.35in !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   /* Optimize page breaks */
