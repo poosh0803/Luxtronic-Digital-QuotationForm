@@ -190,19 +190,19 @@
     print-color-adjust: exact !important;
   }
 
-  /* Luxtronic print standard: A4, @page margin 0, safe margin as padding on
-     .main-content (see the rule below). Chrome's Margins option can discard
-     an @page margin but never padding, so Default/Minimum/None print the same. */
+  /* Luxtronic print standard: A4 on the browser's Default margins (10 mm,
+     clear of the paper edge and printer clip zone), with 3 mm padding on
+     .main-content as insurance if someone picks Minimum. fitPage.js
+     (data-fit-page = the 190 x 277 mm area inside the margins) zooms the
+     quotation down when it is too long, so it always prints on ONE page. */
   @page {
     size: A4;
-    margin: 0;
+    margin: 10mm;
   }
 
   .main-content {
     margin: 0 !important;
-    padding: 0.35in !important;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
+    padding: 3mm !important;
   }
 
   /* Optimize page breaks */
